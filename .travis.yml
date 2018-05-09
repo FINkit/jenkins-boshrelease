@@ -1,0 +1,10 @@
+language: ruby
+
+dist: trusty
+
+before_install:
+- curl -o /home/travis/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.48-linux-amd64
+- chmod +x /home/travis/bosh
+
+script: 
+- /home/travis/bosh create-release  
