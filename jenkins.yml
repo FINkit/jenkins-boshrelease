@@ -18,7 +18,6 @@ instance_groups:
           address: http://localhost:8080/
   networks:
   - name: default
-  persistent_disk_pool: 10GB
   stemcell: default
   vm_type: default
 - name: jenkins-slave
@@ -38,7 +37,7 @@ instance_groups:
   networks:
   - name: default
   stemcell: default
-  vm_type: small
+  vm_type: default
 
 releases:
 - name: jenkins-boshrelease
