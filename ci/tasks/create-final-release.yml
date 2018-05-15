@@ -4,10 +4,10 @@ image_resource:
   source:
     repository: engineerbetter/pcf-ops
 inputs:
-- name: devtools-boshrelease
+- name: jenkins-boshrelease
 - name: version
 outputs:
-- name: final-release-tarball
+- name: final-jenkins-boshrelease-tarball
 run:
   path: bash
   args:
@@ -15,7 +15,7 @@ run:
   - | 
     version=$(<version/version)
     bosh create-release \
-      --tarball=final-release-tarball/devtools-boshrelease-v$version.tgz \
-      --dir=devtools-boshrelease \
+      --tarball=final-jenkins-boshrelease-tarball/jenkins-boshrelease-v$version.tgz \
+      --dir=jenkins-boshrelease \
       --final \
       --version="$version"
