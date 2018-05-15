@@ -5,7 +5,7 @@ image_resource:
     repository: engineerbetter/pcf-ops
 inputs:
 - name: bbl-state
-- name: devtools-boshrelease
+- name: jenkins-boshrelease
 - name: devtools-tests
 run:
   path: /bin/bash
@@ -29,7 +29,7 @@ run:
       export NEXUS_HOST="http://localhost:8081" # TODO Refactor tests to remove dependency on Nexus in Jenkins unit tests.
     popd
 
-    export INSTALLED_PLUGINS_FILE_PATH="${PWD}/devtools-boshrelease/src/jenkins/plugins.txt"
+    export INSTALLED_PLUGINS_FILE_PATH="${PWD}/jenkins-boshrelease/src/jenkins/plugins.txt"
     cp -R devtools-tests/jenkins /go/src/
     sleep 10
 
