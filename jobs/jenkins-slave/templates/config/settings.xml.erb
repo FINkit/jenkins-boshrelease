@@ -1,0 +1,79 @@
+<settings>
+	<% if_link('nexus') do |nexus| %>
+    <servers>
+        <server>
+			<id>internal-releases</id>
+            <username><%= nexus.p("nexus.deployer.username") %></username>
+            <password><%= nexus.p("nexus.deployer.password") %></password>
+        </server>
+        <server>
+            <id>internal-snapshots</id>
+            <username><%= nexus.p("nexus.deployer.username") %></username>
+            <password><%= nexus.p("nexus.deployer.password") %></password>
+        </server>
+    </servers>
+	<mirrors>
+		<mirror>
+			<!--This sends everything else to /public -->
+			<id>nexus-central</id>
+			<mirrorOf>*</mirrorOf>
+			<url><%= "http://#{nexus.instances[0].address}:#{nexus.p('nexus.http.port')}/repository/public/" %></url>
+		</mirror>
+	</mirrors>
+	<profiles>
+		<profile>
+			<id>nexus</id>
+			<!--Enable snapshots for the built in central repo to direct -->
+			<!--all requests to nexus via the mirror -->
+			<repositories>
+				<repository>
+					<id>nexus-releases</id>
+					<url><%= "http://#{nexus.instances[0].address}:#{nexus.p('nexus.http.port')}/repository/releases" %></url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>nexus-snapshots</id>
+					<url><%= "http://#{nexus.instances[0].address}:#{nexus.p('nexus.http.port')}/repository/snapshots" %></url>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>nexus-central</id>
+					<url>http://bogus-url</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>nexus-central</id>
+					<url>http://bogus-url</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+	<activeProfiles>
+		<!--make the profile active all the time -->
+		<activeProfile>nexus</activeProfile>
+	</activeProfiles>
+	<% end %>
+</settings>

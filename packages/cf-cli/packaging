@@ -1,0 +1,6 @@
+set -e
+set -i
+cd cf-cli
+tar -xzvf cf-*.tgz
+chmod +x cf
+cp cf -v  ${BOSH_INSTALL_TARGET}

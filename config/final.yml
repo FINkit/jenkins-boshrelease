@@ -1,0 +1,6 @@
+---
+name: devtools
+blobstore:
+  provider: gcs
+  options:
+    bucket_name: buildtools-blobs

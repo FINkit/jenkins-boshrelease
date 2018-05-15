@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+if [[ ! -d /var/vcap/data/jenkins-slave ]]; then
+    mkdir -p /var/vcap/data/jenkins-slave
+fi
+
+if [[ -d /var/vcap/jobs/jenkins-slave/packages/apache-maven/conf ]]; then
+    mv /var/vcap/jobs/jenkins-slave/config/settings.xml /var/vcap/jobs/jenkins-slave/packages/apache-maven/conf/settings.xml
+fi
+chown -R vcap:vcap /var/vcap/data/jenkins-slave

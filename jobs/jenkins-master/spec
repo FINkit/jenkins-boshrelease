@@ -1,0 +1,70 @@
+---
+name: jenkins-master
+
+packages:
+- oraclejdk
+- jenkins
+- git-client
+
+provides:
+- name: jenkins_master
+  type: jenkins
+
+templates:
+  bin/backup.sh.erb: bin/bbr/backup
+  bin/jenkins-master_ctl: bin/jenkins-master_ctl
+  bin/monit_debugger: bin/monit_debugger
+  bin/post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
+  bin/pre-restore-lock.sh.erb: bin/bbr/pre-restore-lock
+  bin/pre-start.erb: bin/pre-start
+  bin/restore.sh.erb: bin/bbr/restore
+  config/branding.css.erb: config/branding.css
+  config/config.xml.erb: config/config.xml
+  config/configure-access.groovy.erb: init.groovy.d/configure-access.groovy
+  config/configure-github-access.groovy.erb: init.groovy.d/configure-github-access.groovy
+  config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
+  config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
+  config/envInject.xml.erb: config/envInject.xml
+  config/envinject-plugin-configuration.xml.erb: config/envinject-plugin-configuration.xml
+  config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml.erb: config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml
+  config/hudson.plugins.timestamper.TimestamperConfig.xml.erb: config/hudson.plugins.timestamper.TimestamperConfig.xml
+  config/jenkins.model.JenkinsLocationConfiguration.xml.erb: config/jenkins.model.JenkinsLocationConfiguration.xml
+  config/jenkins_logo.png: config/jenkins_logo.png
+  config/org.codefirst.SimpleThemeDecorator.xml.erb: config/org.codefirst.SimpleThemeDecorator.xml
+  config/scriptApproval.xml.erb: config/scriptApproval.xml
+  config/sonar.xml.erb: config/sonar.xml
+  config/tcp-slave-agent-port.groovy.erb: init.groovy.d/tcp-slave-agent-port.groovy
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+properties:
+  jenkins.server.address:
+    description: "Fully qualified address of Jenkins server"
+    default: "127.0.0.1:8080"
+  jenkins.admin.email:
+    description: "Email address to send all emails from"
+  jenkins.admin.password:
+    description: "Password for the admin user"
+  jenkins.agent.password:
+    description: "Password for the agent user"
+  jenkins.github.oauth.org_name:
+    description: "Github oAuth org name"
+    default: "FinKit"
+  jenkins.github.oauth.admins:
+    description: "Github admin usernames"
+    default: "administrator"
+  jenkins.github.oauth.url.web:
+    description: "Github web url"
+    default: "https://github.com"
+  jenkins.github.oauth.url.api:
+    description: "Github api url"
+    default: "https://github.com/api/v3"
+  jenkins.github.oauth.client.id:
+    description: "Github client ID"
+    default: "placeholder_client_id"
+  jenkins.github.oauth.client.secret:
+    description: "Github client.secret"
+    default: "placeholder_client_secret"
+  jenkins.use_github_auth:
+    description: "Jenkins github auth"
+    default: "false"

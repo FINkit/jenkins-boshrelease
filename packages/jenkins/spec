@@ -1,0 +1,7 @@
+---
+name: jenkins
+dependencies:
+- oraclejdk
+files:
+- jenkins/jenkins_2.107.2.war
+- jenkins/plugins-201804251332.zip

@@ -1,0 +1,7 @@
+import jenkins.security.s2m.AdminWhitelistRule
+import jenkins.model.Jenkins
+
+def instance = Jenkins.getInstance()
+instance.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false)
+
+instance.save()

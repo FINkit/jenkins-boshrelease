@@ -1,0 +1,10 @@
+import jenkins.model.*
+import hudson.tasks.*
+
+def instance = Jenkins.getInstance()
+def mvnDescriptor = instance.getDescriptor(Maven)
+mvnDescriptor.setInstallations(
+    new Maven.MavenInstallation("default", "/var/vcap/packages/apache-maven")
+)
+
+instance.save()

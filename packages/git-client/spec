@@ -1,0 +1,5 @@
+---
+name: git-client
+dependencies:
+files:
+- git/git-2.14.1.tar.gz

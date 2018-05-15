@@ -1,0 +1,10 @@
+set -e
+
+GROOVY_VERSION="2.4.13"
+
+archive="groovy/apache-groovy-binary-2.4.13.zip"
+
+echo "Extracting archive..."
+unzip ${archive}
+
+mv groovy-${GROOVY_VERSION}/* ${BOSH_INSTALL_TARGET}

@@ -1,0 +1,7 @@
+---
+name: ansible
+
+dependencies: []
+
+files:
+- ansible/ansible-v2.5.2.tar.gz

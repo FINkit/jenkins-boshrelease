@@ -1,0 +1,5 @@
+check process jenkins-slave
+  with pidfile /var/vcap/sys/run/jenkins-slave/jenkins-slave.pid
+  start program "/var/vcap/jobs/jenkins-slave/bin/monit_debugger jenkins-slave_ctl '/var/vcap/jobs/jenkins-slave/bin/jenkins-slave_ctl start'"
+  stop program "/var/vcap/jobs/jenkins-slave/bin/monit_debugger jenkins-slave_ctl '/var/vcap/jobs/jenkins-slave/bin/jenkins-slave_ctl stop'"
+  group vcap
