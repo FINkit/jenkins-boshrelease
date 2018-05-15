@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -ex
+
+/var/vcap/bosh/bin/monit stop jenkins-master
+# wait for job to stop

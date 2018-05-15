@@ -1,0 +1,40 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: engineerbetter/pcf-ops
+inputs:
+- name: bbl-state
+- name: devtools-boshrelease
+- name: devtools-tests
+run:
+  path: /bin/bash
+  args:
+  - -c
+  - | 
+    pushd bbl-state/bbl-state
+      source <(bbl print-env)
+      JUMPBOX_USER="jumpbox"; export JUMPBOX_USER
+      JUMPBOX_HOST=$(bosh int <(bbl outputs) --path /jumpbox_url | cut -d: -f1); export JUMPBOX_HOST
+      # set up jumpbox ssh tunnel
+      instance_info=$(bosh --json instances -i); export instance_info
+      ip=$(jq --raw-output .Tables[0].Rows[0].ips <<< "$instance_info")
+      # shellcheck disable=SC2029
+      ssh -o StrictHostKeyChecking=no -fNnL "8080:$ip:8080" -i "$JUMPBOX_PRIVATE_KEY" "$JUMPBOX_USER@$JUMPBOX_HOST"
+      trap "pkill ssh" EXIT
+      credhub api --server=${CREDHUB_SERVER}
+      credhub login --username=${CREDHUB_USERNAME} --password=${CREDHUB_PASSWORD}
+      export JENKINS_PASSWORD=$(credhub get --name=/bosh-devtools-boshrelease/buildstack/jenkins_admin_password --output-json | jq --raw-output ".value" | tr --delete ' ')
+      export JENKINS_HOST="http://localhost:8080"
+      export NEXUS_HOST="http://localhost:8081" # TODO Refactor tests to remove dependency on Nexus in Jenkins unit tests.
+    popd
+
+    export INSTALLED_PLUGINS_FILE_PATH="${PWD}/devtools-boshrelease/src/jenkins/plugins.txt"
+    cp -R devtools-tests/jenkins /go/src/
+    sleep 10
+
+    pushd /go/src/jenkins
+      go get github.com/DATA-DOG/godog/cmd/godog
+      set -e
+      godog -t @unit -t @jenkins
+    popd

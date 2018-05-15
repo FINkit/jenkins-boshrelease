@@ -1,0 +1,40 @@
+ansible/ansible-v2.5.2.tar.gz:
+  size: 10192927
+  object_id: a449d0df-70e7-4843-4bb5-00396cb58357
+  sha: 959523a9b1db5a34cb3c3f6d37137f5b8895a55d
+cf-cli/cf-6.46.1.tgz:
+  size: 5910456
+  object_id: 4e1d0b05-5da2-41fd-4df8-f3c059c98240
+  sha: faade069c0e7a76cb3bb1c9dfd69da2d340155c9
+git/git-2.14.1.tar.gz:
+  size: 6987933
+  object_id: 4c11f3bb-d077-4a0d-6a81-2cb433fb2964
+  sha: e173270a5f224078e3f6c639937da5bd84045225
+groovy/apache-groovy-binary-2.4.13.zip:
+  size: 36587726
+  object_id: 533334f0-f6e8-4959-6ce5-90687aa938c0
+  sha: d14bba275221389cbc4726a8c8c14f5a0f9e891d
+jenkins/apache-maven-3.5.2-bin.tar.gz:
+  size: 8738691
+  object_id: 2e476708-9b9f-4973-6f39-ee38965cd9ee
+  sha: 190dcebb8a080f983af4420cac4f3ece7a47dd64
+jenkins/jenkins_2.107.2.war:
+  size: 74568464
+  object_id: 5de3e0fe-54ec-4dae-60d5-28597296d2d7
+  sha: ad0de4ca36ae37586c801679838acfe01e29dc09
+jenkins/plugins-201804251332.zip:
+  size: 223213245
+  object_id: e67a7fd1-2825-4675-7c02-0dab27cd2caa
+  sha: c7874645b4b1870bc787e330a0a48c97530f6074
+jenkins/swarm-client-3.6.jar:
+  size: 1620623
+  object_id: 7960ab0b-6580-41ce-5139-43ebd3b390fa
+  sha: e9ee5866393ccae0d4b5500ce5521e2850c98cf7
+oraclejava/jdk-8u161-linux-x64.tar.gz:
+  size: 189756259
+  object_id: eb100739-7d1c-48ff-5687-ee2ad4f0209f
+  sha: 9662b358ec90ecdc2c06acc2e326fbf25eaf567d
+swarm-client/swarm-client-2.2-jar-with-dependencies.jar:
+  size: 1385476
+  object_id: 0955da33-cdff-4169-7914-fa46bfb086a9
+  sha: 731ca367119d4b46421c70367111f4c9902a2cb7

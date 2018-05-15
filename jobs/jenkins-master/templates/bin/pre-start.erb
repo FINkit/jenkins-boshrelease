@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+mkdir -p /var/vcap/store/jenkins-master
+mkdir -p /var/vcap/store/jenkins-master/init.groovy.d
+mkdir -p /var/vcap/store/jenkins-master/plugins
+
+JENKINS_USE_GITHUB_AUTH="<%= p('jenkins.use_github_auth') %>"
+
+if [[ $(ls /var/vcap/jobs/jenkins-master/config/*.xml) ]]; then
+    echo "Copying Config..."
+    cp /var/vcap/jobs/jenkins-master/config/*.xml /var/vcap/store/jenkins-master
+fi
+
+if [[ $(ls /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy) ]]; then
+    echo "Copying Groovy..."
+    cp /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy /var/vcap/store/jenkins-master/init.groovy.d/
+    # We want standard Jenkins managed access unless defined
+    rm /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
+fi
+
+if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
+    rm /var/vcap/store/jenkins-master/init.d/configure-access.groovy
+    cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-github-access.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
+fi
+
+echo "Configuring Plugins..."
+unzip -o /var/vcap/jobs/jenkins-master/packages/jenkins/jenkins/plugins-*.zip -d /var/vcap/store/jenkins-master/plugins
+# add disabled plugin list
+touch /var/vcap/store/jenkins-master/plugins/windows-slaves.jpi.disabled
+touch /var/vcap/store/jenkins-master/plugins/subversion.jpi.disabled
+touch /var/vcap/store/jenkins-master/plugins/cvs.jpi.disabled
+touch /var/vcap/store/jenkins-master/plugins/ant.jpi.disabled
+touch /var/vcap/store/jenkins-master/plugins/translation.jpi.disabled
+
+if [[ ! -d /var/vcap/store/jenkins-master/userContent ]]; then
+    echo "Copying UserContent..."
+    cp /var/vcap/jobs/jenkins-master/config/*.png /var/vcap/store/jenkins-master/userContent
+    cp /var/vcap/jobs/jenkins-master/config/*.css /var/vcap/store/jenkins-master/userContent
+fi
+
+chown vcap:vcap -R /var/vcap/store/jenkins-master

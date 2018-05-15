@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -ex
+
+export JOB_DIR=/var/vcap/jobs/jenkins-master
+source $JOB_DIR/data/properties.sh
+
+cd $JENKINS_HOME
+tar -czf ${BBR_ARTIFACT_DIRECTORY}jenkins.tgz .

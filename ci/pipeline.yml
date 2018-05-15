@@ -1,0 +1,368 @@
+---
+resource_types:
+- name: bbl-state-resource
+  type: docker-image
+  source:
+    repository: cfinfrastructure/bbl-state-resource
+- name: bosh-deployment
+  type: docker-image
+  source:
+    repository: cloudfoundry/bosh-deployment-resource
+- name: concourse-pipeline
+  type: docker-image
+  source:
+    repository: concourse/concourse-pipeline-resource
+- name: google-cloud-storage
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+    tag: "v0.1.0"
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+
+resources:
+- name: bbl-state
+  type: git
+  source:
+    branch: master
+    uri: ((bbl-state.url))
+    username: ((git-credentials.username))
+    password: ((git-credentials.password))
+- name: bosh-bootloader
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/bosh-bootloader.git
+    tag_filter: "v6.6.4"
+- name: buildstack-deployment
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/FINkit/buildstack-deployment.git
+- name: bosh-deployment
+  type: bosh-deployment
+- name: cf-deployment-concourse-tasks
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+    tag_filter: "v6.7"
+- name: concourse-tasks
+  type: git 
+  source:
+    branch: master
+    uri: https://github.com/garethjevans/concourse-tasks.git
+    tag_filter: "v1.0"
+- name: devtools-boshrelease
+  type: git
+  source:
+      uri: git@github.com:finkit/devtools-boshrelease
+      branch: master
+      private_key: ((github-deploy-key.private))
+- name: devtools-tests
+  type: git
+  source:
+      uri: git@github.com:finkit/devtools-tests
+      branch: master
+      private_key: ((github-devtools-tests-key.private))
+- name: dev-release-tarball
+  type: google-cloud-storage
+  source:
+    bucket: ((dev-build-automate-release-tarballs.bucket))
+    json_key: ((concourse_project_google_key))
+    versioned_file: devtools-boshrelease/dev-release.tgz
+- name: gcs-final-release-tarball
+  type: google-cloud-storage
+  source:
+    bucket: ((dev-build-automate-release-tarballs.bucket))
+    json_key: ((concourse_project_google_key))
+    regexp: devtools-boshrelease/devtools-boshrelease-v(.*).tgz
+- name: warden-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+- name: github-prerelease
+  type: github-release
+  source:
+    <<: &github-release-source
+      owner: finkit
+      repository: devtools-boshrelease
+      access_token: ((github-access-token))
+    # "pre_release: true" is not effective on it's own, "release: false" must also be set
+    # https://github.com/concourse/github-release-resource/issues/40
+    pre_release: true
+    release: false
+- name: github-release
+  type: github-release
+  source:
+    <<: *github-release-source
+    # drafts: true
+- name: set-pipeline
+  type: concourse-pipeline
+  source:
+    target: ((concourse-auth.target))
+    teams:
+    - name: ((concourse-auth.team))
+      username: ((concourse-auth.username))
+      password: ((concourse-auth.password))
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: ((slack.hook))
+- name: version
+  type: semver
+  source:
+    driver: gcs 
+    bucket: ((dev-build-automate-release-tarballs.bucket))
+    json_key: ((concourse_project_google_key))
+    initial_version: 0.0.0
+    key: version
+
+groups:
+- name: create
+  jobs:
+  - set-pipeline
+  - setup-infrastructure
+  - create-dev-release
+  - test-jenkins
+  - prerelease-patch
+  - prerelease-minor
+  - prerelease-major
+  - release-final
+- name: destroy
+  jobs:
+  - destroy-bosh
+
+jobs:
+- name: set-pipeline
+  plan:
+  - get: devtools-boshrelease
+    trigger: true
+  - put: set-pipeline
+    params:
+      pipelines:
+      - name: devtools-boshrelease
+        team: ((concourse-auth.team))
+        config_file: devtools-boshrelease/ci/pipeline.yml
+  <<: &slack-alert
+    on_failure:
+      put: slack-alert
+      params:
+        channel: ((slack.channel))
+        username: ((slack.user))
+        text: "<((concourse-auth.target))/teams/((concourse-auth.team))/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}|${BUILD_PIPELINE_NAME}/${BUILD_JOB_NAME}>: ${BUILD_ID} - [Failed]"
+        icon_emoji: ":fire:"
+
+- name: create-dev-release
+  plan:
+  - aggregate:
+    - get: devtools-boshrelease
+      passed:
+      - set-pipeline
+      trigger: true
+  - task: create-release
+    file: devtools-boshrelease/ci/tasks/create-dev-release.yml
+  - put: dev-release-tarball
+    params: { file: dev-release-tarball/dev-release.tgz }
+  <<: *slack-alert
+
+- name: setup-infrastructure
+  serial_groups:
+  - bbl
+  plan:
+  - aggregate:
+    - get: bbl-state
+    - get: bosh-bootloader
+    - get: buildstack-deployment
+    - get: cf-deployment-concourse-tasks
+    - get: concourse-tasks
+    - get: devtools-boshrelease
+      passed:
+      - set-pipeline
+      trigger: true
+  - task: bbl-up
+    file: cf-deployment-concourse-tasks/bbl-up/task.yml
+    input_mapping:
+      bbl-config: buildstack-deployment
+      bbl-state: bbl-state
+    output_mapping:
+      updated-bbl-state: updated-bbl-state
+    params:
+      BBL_CONFIG_DIR: iaas-support/bosh-lite-gcp
+      BBL_ENV_NAME: devtools-boshrelease
+      BBL_GCP_REGION: ((gcp.region))
+      BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp.key))
+      BBL_IAAS: gcp
+      SKIP_LB_CREATION: true
+    ensure:
+      put: bbl-state
+      params:
+        repository: updated-bbl-state
+        rebase: true
+  <<: *slack-alert
+
+- name: test-jenkins
+  serial_groups:
+  - tests
+  plan:
+  - aggregate: &get-test-resources
+    - get: bbl-state
+      passed:
+      - setup-infrastructure
+    - get: buildstack-deployment
+      passed:
+      - setup-infrastructure
+    - get: cf-deployment-concourse-tasks
+    - get: devtools-boshrelease
+      passed:
+      - create-dev-release
+      - setup-infrastructure
+    - get: devtools-tests
+    - get: dev-release-tarball
+      passed:
+      - create-dev-release
+      trigger: true
+    - get: warden-stemcell
+  - aggregate:
+    - do:
+      - task: create-jenkins-bosh-config
+        file: devtools-boshrelease/ci/tasks/create-bosh-config.yml
+        params:
+          BOSH_DEPLOYMENT: &deployment-name buildstack
+      - put: bosh-deployment # Deploy Jenkins instance
+        params:
+          ops_files:
+          - buildstack-deployment/operations/just-jenkins.yml
+          source_file: source/source.yml
+          manifest: buildstack-deployment/buildstack.yml
+          releases:
+          - dev-release-tarball/dev-release.tgz
+          stemcells:
+          - warden-stemcell/stemcell.tgz
+          vars:
+            deployment_name: *deployment-name
+      - task: test-jenkins
+        file: devtools-boshrelease/ci/tasks/test-jenkins.yml
+        params:
+          BOSH_DEPLOYMENT: *deployment-name
+        ensure:
+          put: bosh-deployment # Destroy Jenkins instance
+          params:
+            source_file: source/source.yml
+            delete:
+              enabled: true
+              force: true
+            vars:
+              deployment_name: *deployment-name
+  <<: *slack-alert
+
+- name: destroy-bosh
+  serial_groups:
+  - bbl
+  plan:
+  - aggregate:
+    - get: bbl-state
+    - get: cf-deployment-concourse-tasks
+  - task: bbl-destroy
+    file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+    input_mapping:
+      bbl-state: bbl-state
+    output_mapping:
+      updated-bbl-state: updated-bbl-state
+    params:
+      BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp.key))
+    ensure:
+      put: bbl-state
+      params:
+        repository: updated-bbl-state
+        rebase: true
+  <<: *slack-alert
+
+- name: release-final
+  serial_groups:
+  - github-release
+  plan:
+  - put: version
+    params:
+      bump: final
+  - do: &do-release
+    - aggregate:
+      - get: devtools-boshrelease
+        passed: &tests
+        - test-jenkins
+    - task: create-release
+      file: devtools-boshrelease/ci/tasks/create-final-release.yml
+    - put: gcs-final-release-tarball
+      params: { file: final-release-tarball/*.tgz }
+    - put: github-release
+      params: &put-github-release-params
+        name: version/version
+        tag: version/version
+        tag_prefix: v
+        globs: 
+        - final-release-tarball/*.tgz
+    - task: publish-draft-release
+      file: devtools-boshrelease/ci/tasks/publish-draft-release/publish-draft-release.yml
+      params:
+        GITHUB_ACCESS_KEY: ((github_access_key))
+        OWNER: finkit
+        REPO: devtools-boshrelease
+        VERSION: version/version
+        BRANCH: master
+        DESCRIPTION: version/version
+  <<: *slack-alert
+
+- name: prerelease-major
+  serial_groups:
+  - github-release
+  plan:
+  - put: version
+    params:
+      bump: major
+      pre: rc
+  - do: &do-prerelease
+    - aggregate:
+      - get: devtools-boshrelease
+        passed: *tests
+    - task: create-release
+      file: devtools-boshrelease/ci/tasks/create-final-release.yml
+    - put: github-prerelease
+      params: *put-github-release-params
+  <<: *slack-alert
+
+- name: prerelease-minor
+  serial_groups:
+  - github-release
+  plan:
+  - put: version
+    params:
+      bump: minor
+      pre: rc
+  - do: *do-prerelease
+  <<: *slack-alert
+
+- name: prerelease-patch
+  serial_groups:
+  - github-release
+  plan:
+  - put: version
+    params:
+      bump: patch
+      pre: rc
+  - do:
+    - aggregate:
+      - get: devtools-boshrelease
+        passed: *tests
+        trigger: true
+    - task: create-release
+      file: devtools-boshrelease/ci/tasks/create-final-release.yml
+    - put: github-prerelease
+      params: &put-github-release-params
+        name: version/version
+        tag: version/version
+        tag_prefix: v
+        globs: 
+        - final-release-tarball/*.tgz
+  <<: *slack-alert
