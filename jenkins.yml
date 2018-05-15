@@ -1,0 +1,75 @@
+name: jenkins
+instance_groups:
+- name: jenkins-master
+  azs: [z1]
+  instances: 1
+  jobs:
+  - name: jenkins-master
+    release: jenkins-boshrelease
+    properties:
+      jenkins:
+        config: config.xml
+        admin:
+          email: admin@localhost
+          password: ((jenkins_admin_password))
+        agent:
+          password: ((jenkins_agent_password))
+        server:
+          address: http://localhost:8080/
+        github:
+          oauth:
+            org_name: "test-org"
+            admins:
+              admin1: "admin1"
+              admin2: "admin2"
+              admin3: "admin3"
+            url:
+              web: "http://finkit.io"
+              api: "http://finkit.io"
+            client:
+              id: "00000"
+              secret: "0000"
+  networks:
+  - name: default
+  persistent_disk_pool: 10GB
+  stemcell: default
+  vm_type: default
+- name: jenkins-slave
+  azs: [z1]
+  instances: 1
+  jobs:
+  - name: jenkins-slave
+    release: jenkins-boshrelease
+    properties:
+      jenkins:
+        slave:
+          executors: 2
+          labels: build
+          master_password: ((jenkins_agent_password))
+          master_username: agent
+          mode: exclusive
+  networks:
+  - name: default
+  stemcell: default
+  vm_type: small
+
+releases:
+- name: jenkins-boshrelease
+  version: latest
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+update:
+  canaries: 1
+  canary_watch_time: 15000-300000
+  max_in_flight: 1
+  update_watch_time: 15000-300000
+
+variables:
+- name: jenkins_admin_password
+  type: password
+- name: jenkins_agent_password
+  type: password
