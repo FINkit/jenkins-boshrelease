@@ -4,7 +4,7 @@ We welcome pull requests from everyone. By participating in this project, you ag
 
 Fork, then clone the repository:
 
-    git clone git@github.com:your-username/devtools-boshrelease
+    git clone git@github.com:your-username/jenkins-boshrelease
 
 Make your change(s).
 
