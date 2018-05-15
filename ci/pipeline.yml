@@ -36,11 +36,6 @@ resources:
     branch: master
     uri: https://github.com/cloudfoundry/bosh-bootloader.git
     tag_filter: "v6.6.4"
-- name: buildstack-deployment
-  type: git
-  source:
-    branch: master
-    uri: https://github.com/FINkit/buildstack-deployment.git
 - name: bosh-deployment
   type: bosh-deployment
 - name: cf-deployment-concourse-tasks
@@ -50,15 +45,15 @@ resources:
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
     tag_filter: "v6.7"
 - name: concourse-tasks
-  type: git 
+  type: git
   source:
     branch: master
     uri: https://github.com/garethjevans/concourse-tasks.git
     tag_filter: "v1.0"
-- name: devtools-boshrelease
+- name: jenkins-boshrelease
   type: git
   source:
-      uri: git@github.com:finkit/devtools-boshrelease
+      uri: git@github.com:finkit/jenkins-boshrelease
       branch: master
       private_key: ((github-deploy-key.private))
 - name: devtools-tests
@@ -67,18 +62,18 @@ resources:
       uri: git@github.com:finkit/devtools-tests
       branch: master
       private_key: ((github-devtools-tests-key.private))
-- name: dev-release-tarball
+- name: jenkins-boshrelease-tarball
   type: google-cloud-storage
   source:
     bucket: ((dev-build-automate-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
-    versioned_file: devtools-boshrelease/dev-release.tgz
-- name: gcs-final-release-tarball
+    versioned_file: jenkins-boshrelease/dev-release.tgz
+- name: final-release-tarball
   type: google-cloud-storage
   source:
     bucket: ((dev-build-automate-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
-    regexp: devtools-boshrelease/devtools-boshrelease-v(.*).tgz
+    regexp: jenkins-boshrelease/jenkins-boshrelease-v(.*).tgz
 - name: warden-stemcell
   type: bosh-io-stemcell
   source:
@@ -88,7 +83,7 @@ resources:
   source:
     <<: &github-release-source
       owner: finkit
-      repository: devtools-boshrelease
+      repository: jenkins-boshrelease
       access_token: ((github-access-token))
     # "pre_release: true" is not effective on it's own, "release: false" must also be set
     # https://github.com/concourse/github-release-resource/issues/40
@@ -114,7 +109,7 @@ resources:
 - name: version
   type: semver
   source:
-    driver: gcs 
+    driver: gcs
     bucket: ((dev-build-automate-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
     initial_version: 0.0.0
@@ -138,14 +133,14 @@ groups:
 jobs:
 - name: set-pipeline
   plan:
-  - get: devtools-boshrelease
+  - get: jenkins-boshrelease
     trigger: true
   - put: set-pipeline
     params:
       pipelines:
-      - name: devtools-boshrelease
+      - name: jenkins-boshrelease
         team: ((concourse-auth.team))
-        config_file: devtools-boshrelease/ci/pipeline.yml
+        config_file: jenkins-boshrelease/ci/pipeline.yml
   <<: &slack-alert
     on_failure:
       put: slack-alert
@@ -158,14 +153,14 @@ jobs:
 - name: create-dev-release
   plan:
   - aggregate:
-    - get: devtools-boshrelease
+    - get: jenkins-boshrelease
       passed:
       - set-pipeline
       trigger: true
   - task: create-release
-    file: devtools-boshrelease/ci/tasks/create-dev-release.yml
-  - put: dev-release-tarball
-    params: { file: dev-release-tarball/dev-release.tgz }
+    file: jenkins-boshrelease/ci/tasks/create-dev-release.yml
+  - put: jenkins-boshrelease-tarball
+    params: { file: jenkins-boshrelease-tarball/dev-release.tgz }
   <<: *slack-alert
 
 - name: setup-infrastructure
@@ -178,20 +173,20 @@ jobs:
     - get: buildstack-deployment
     - get: cf-deployment-concourse-tasks
     - get: concourse-tasks
-    - get: devtools-boshrelease
+    - get: jenkins-boshrelease
       passed:
       - set-pipeline
       trigger: true
   - task: bbl-up
     file: cf-deployment-concourse-tasks/bbl-up/task.yml
     input_mapping:
-      bbl-config: buildstack-deployment
+      bbl-config: jenkins-boshrelease
       bbl-state: bbl-state
     output_mapping:
       updated-bbl-state: updated-bbl-state
     params:
-      BBL_CONFIG_DIR: iaas-support/bosh-lite-gcp
-      BBL_ENV_NAME: devtools-boshrelease
+      BBL_CONFIG_DIR: ci/customisation
+      BBL_ENV_NAME: jenkins-boshrelease
       BBL_GCP_REGION: ((gcp.region))
       BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp.key))
       BBL_IAAS: gcp
@@ -204,23 +199,18 @@ jobs:
   <<: *slack-alert
 
 - name: test-jenkins
-  serial_groups:
-  - tests
   plan:
-  - aggregate: &get-test-resources
+  - aggregate:
     - get: bbl-state
       passed:
       - setup-infrastructure
-    - get: buildstack-deployment
-      passed:
-      - setup-infrastructure
     - get: cf-deployment-concourse-tasks
-    - get: devtools-boshrelease
+    - get: jenkins-boshrelease
       passed:
       - create-dev-release
       - setup-infrastructure
     - get: devtools-tests
-    - get: dev-release-tarball
+    - get: jenkins-boshrelease-tarball
       passed:
       - create-dev-release
       trigger: true
@@ -228,26 +218,24 @@ jobs:
   - aggregate:
     - do:
       - task: create-jenkins-bosh-config
-        file: devtools-boshrelease/ci/tasks/create-bosh-config.yml
+        file: jenkins-boshrelease/ci/tasks/create-bosh-config.yml
         params:
-          BOSH_DEPLOYMENT: &deployment-name buildstack
+          BOSH_DEPLOYMENT: &deployment-name jenkins
       - put: bosh-deployment # Deploy Jenkins instance
         params:
-          ops_files:
-          - buildstack-deployment/operations/just-jenkins.yml
           source_file: source/source.yml
-          manifest: buildstack-deployment/buildstack.yml
+          manifest: jenkins-boshrelease/jenkins.yml
           releases:
-          - dev-release-tarball/dev-release.tgz
+          - jenkins-boshrelease-tarball/dev-release.tgz
           stemcells:
           - warden-stemcell/stemcell.tgz
           vars:
             deployment_name: *deployment-name
       - task: test-jenkins
-        file: devtools-boshrelease/ci/tasks/test-jenkins.yml
+        file: jenkins-boshrelease/ci/tasks/test-jenkins.yml
         params:
           BOSH_DEPLOYMENT: *deployment-name
-        ensure:
+        on_success:
           put: bosh-deployment # Destroy Jenkins instance
           params:
             source_file: source/source.yml
@@ -289,26 +277,26 @@ jobs:
       bump: final
   - do: &do-release
     - aggregate:
-      - get: devtools-boshrelease
+      - get: jenkins-boshrelease
         passed: &tests
         - test-jenkins
     - task: create-release
-      file: devtools-boshrelease/ci/tasks/create-final-release.yml
-    - put: gcs-final-release-tarball
+      file: jenkins-boshrelease/ci/tasks/create-final-release.yml
+    - put: final-release-tarball
       params: { file: final-release-tarball/*.tgz }
     - put: github-release
       params: &put-github-release-params
         name: version/version
         tag: version/version
         tag_prefix: v
-        globs: 
+        globs:
         - final-release-tarball/*.tgz
     - task: publish-draft-release
-      file: devtools-boshrelease/ci/tasks/publish-draft-release/publish-draft-release.yml
+      file: jenkins-boshrelease/ci/tasks/publish-draft-release/publish-draft-release.yml
       params:
         GITHUB_ACCESS_KEY: ((github_access_key))
         OWNER: finkit
-        REPO: devtools-boshrelease
+        REPO: jenkins-boshrelease
         VERSION: version/version
         BRANCH: master
         DESCRIPTION: version/version
@@ -324,10 +312,10 @@ jobs:
       pre: rc
   - do: &do-prerelease
     - aggregate:
-      - get: devtools-boshrelease
+      - get: jenkins-boshrelease
         passed: *tests
     - task: create-release
-      file: devtools-boshrelease/ci/tasks/create-final-release.yml
+      file: jenkins-boshrelease/ci/tasks/create-final-release.yml
     - put: github-prerelease
       params: *put-github-release-params
   <<: *slack-alert
@@ -353,16 +341,16 @@ jobs:
       pre: rc
   - do:
     - aggregate:
-      - get: devtools-boshrelease
+      - get: jenkins-boshrelease
         passed: *tests
         trigger: true
     - task: create-release
-      file: devtools-boshrelease/ci/tasks/create-final-release.yml
+      file: jenkins-boshrelease/ci/tasks/create-final-release.yml
     - put: github-prerelease
       params: &put-github-release-params
         name: version/version
         tag: version/version
         tag_prefix: v
-        globs: 
+        globs:
         - final-release-tarball/*.tgz
   <<: *slack-alert
