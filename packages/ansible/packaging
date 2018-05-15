@@ -1,8 +1,5 @@
 set -e
 
 ANSIBLE_VERSION=v2.5.2
-mkdir -p ${BOSH_COMPILE_TARGET}/ansible
-cd ${BOSH_COMPILE_TARGET}/ansible
 
-tar xvfz ansible-${ANSIBLE_VERSION}.tar.gz -C ${BOSH_COMPILE_TARGET}/ansible
-mv ${BOSH_COMPILE_TARGET}/ansible/ansible-${ANSIBLE_VERSION}/* ${BOSH_INSTALL_TARGET}
+tar xvfz ansible/ansible-${ANSIBLE_VERSION}.tar.gz -C ${BOSH_INSTALL_TARGET}
