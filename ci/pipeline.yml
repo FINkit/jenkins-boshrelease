@@ -170,7 +170,6 @@ jobs:
   - aggregate:
     - get: bbl-state
     - get: bosh-bootloader
-    - get: buildstack-deployment
     - get: cf-deployment-concourse-tasks
     - get: concourse-tasks
     - get: jenkins-boshrelease
