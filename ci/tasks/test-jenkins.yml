@@ -24,7 +24,7 @@ run:
       trap "pkill ssh" EXIT
       credhub api --server=${CREDHUB_SERVER}
       credhub login --username=${CREDHUB_USERNAME} --password=${CREDHUB_PASSWORD}
-      export JENKINS_PASSWORD=$(credhub get --name=/bosh-jenkins-boshrelease/buildstack/jenkins_admin_password --output-json | jq --raw-output ".value" | tr --delete ' ')
+      export JENKINS_PASSWORD=$(credhub get --name=/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password --output-json | jq --raw-output ".value" | tr --delete ' ')
       export JENKINS_HOST="http://localhost:8080"
       export NEXUS_HOST="http://localhost:8081" # TODO Refactor tests to remove dependency on Nexus in Jenkins unit tests.
     popd
