@@ -113,7 +113,7 @@ resources:
     bucket: ((dev-build-automate-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
     initial_version: 0.0.0
-    key: version
+    key: jenkins.version
 
 groups:
 - name: create
