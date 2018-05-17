@@ -5,7 +5,7 @@ instance_groups:
   instances: 1
   jobs:
   - name: jenkins-master
-    release: jenkins-boshrelease
+    release: jenkins
     properties:
       jenkins:
         config: config.xml
@@ -25,7 +25,7 @@ instance_groups:
   instances: 1
   jobs:
   - name: jenkins-slave
-    release: jenkins-boshrelease
+    release: jenkins
     properties:
       jenkins:
         slave:
