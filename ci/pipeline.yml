@@ -68,7 +68,7 @@ resources:
     bucket: ((dev-build-automate-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
     versioned_file: jenkins-boshrelease/dev-release.tgz
-- name: final-release-tarball
+- name: final-jenkins-release-tarball
   type: google-cloud-storage
   source:
     bucket: ((dev-build-automate-release-tarballs.bucket))
@@ -289,7 +289,7 @@ jobs:
         tag: version/version
         tag_prefix: v
         globs:
-        - final-release-tarball/*.tgz
+        - final-jenkins-boshrelease-tarball/*.tgz
     - task: publish-draft-release
       file: jenkins-boshrelease/ci/tasks/publish-draft-release/publish-draft-release.yml
       params:
@@ -351,5 +351,5 @@ jobs:
         tag: version/version
         tag_prefix: v
         globs:
-        - final-release-tarball/*.tgz
+        - final-jenkins-boshrelease-tarball/*.tgz
   <<: *slack-alert
