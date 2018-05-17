@@ -40,7 +40,7 @@ instance_groups:
   vm_type: default
 
 releases:
-- name: jenkins-boshrelease
+- name: jenkins
   version: latest
 
 stemcells:
