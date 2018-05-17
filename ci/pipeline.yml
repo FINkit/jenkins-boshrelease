@@ -68,7 +68,7 @@ resources:
     bucket: ((dev-build-automate-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
     versioned_file: jenkins-boshrelease/dev-release.tgz
-- name: final-jenkins-release-tarball
+- name: final-jenkins-boshrelease-tarball
   type: google-cloud-storage
   source:
     bucket: ((dev-build-automate-release-tarballs.bucket))
@@ -281,8 +281,8 @@ jobs:
         - test-jenkins
     - task: create-release
       file: jenkins-boshrelease/ci/tasks/create-final-release.yml
-    - put: final-release-tarball
-      params: { file: final-release-tarball/*.tgz }
+    - put: final-jenkins-boshrelease-tarball
+      params: { file: final-jenkins-boshrelease-tarball/*.tgz }
     - put: github-release
       params: &put-github-release-params
         name: version/version
