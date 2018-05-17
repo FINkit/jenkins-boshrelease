@@ -290,15 +290,6 @@ jobs:
         tag_prefix: v
         globs:
         - final-jenkins-boshrelease-tarball/*.tgz
-    - task: publish-draft-release
-      file: jenkins-boshrelease/ci/tasks/publish-draft-release/publish-draft-release.yml
-      params:
-        GITHUB_ACCESS_KEY: ((github_access_key))
-        OWNER: finkit
-        REPO: jenkins-boshrelease
-        VERSION: version/version
-        BRANCH: master
-        DESCRIPTION: version/version
   <<: *slack-alert
 
 - name: prerelease-major
