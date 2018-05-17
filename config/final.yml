@@ -1,5 +1,5 @@
 ---
-name: jenkins-boshrelease
+name: jenkins
 blobstore:
   provider: gcs
   options:
