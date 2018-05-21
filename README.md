@@ -1,6 +1,6 @@
 # BOSH release of Jenkins
 
-[![Build Status](https://travis-ci.org/FinKit/jenkins-boshrelease.svg?branch=master)](https://travis-ci.org/FinKit/jenkins-boshrelease)
+[![Build Status](https://travis-ci.org/FINkit/jenkins-boshrelease.svg?branch=master)](https://travis-ci.org/FINkit/jenkins-boshrelease)
 
 ## 1. Overview
 
