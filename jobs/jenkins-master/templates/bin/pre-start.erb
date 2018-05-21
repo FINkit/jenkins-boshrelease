@@ -22,8 +22,8 @@ if [[ $(ls /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy) ]]; then
 fi
 
 if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
-    if [ -f /var/vcap/store/jenkins-master/init.d/configure-access.groovy ]; then
-        rm /var/vcap/store/jenkins-master/init.d/configure-access.groovy
+    if [ -f /var/vcap/store/jenkins-master/init.groovy.d/configure-access.groovy ]; then
+        rm /var/vcap/store/jenkins-master/init.groovy.d/configure-access.groovy
     fi
     cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-github-access.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
 fi
