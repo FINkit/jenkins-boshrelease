@@ -2,6 +2,7 @@ import hudson.security.SecurityRealm
 import org.jenkinsci.plugins.GithubSecurityRealm
 import org.jenkinsci.plugins.GithubAuthorizationStrategy
 import hudson.security.AuthorizationStrategy
+import jenkins.model.*
 
 String githubWebUri = '<%= p('jenkins.github.oauth.url.web') %>'
 String githubApiUri = '<%= p('jenkins.github.oauth.url.api') %>'
