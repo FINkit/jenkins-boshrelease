@@ -26,6 +26,7 @@ if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
         rm /var/vcap/store/jenkins-master/init.groovy.d/configure-access.groovy
     fi
     cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-github-access.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
+    cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-devsystems-creds.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-devsystems-creds.groovy
 fi
 
 echo "Configuring Plugins..."
