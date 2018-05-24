@@ -5,6 +5,9 @@ dist: trusty
 before_install:
 - curl -o /home/travis/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.48-linux-amd64
 - chmod +x /home/travis/bosh
+- wget https://github.com/concourse/concourse/releases/download/v3.13.0/fly_linux_amd64 -O /home/travis/fly
+- chmod +x /home/travis/fly
 
 script: 
-- /home/travis/bosh create-release  
+- /home/travis/bosh create-release
+- for p in $(find ci -name "*.yml" -type f | grep -v "customisations"); do echo "-> Checking ${p}";/home/travis/fly vp -c "${p}"; done
