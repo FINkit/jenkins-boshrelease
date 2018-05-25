@@ -21,6 +21,7 @@ templates:
   config/branding.css.erb: config/branding.css
   config/config.xml.erb: config/config.xml
   config/configure-access.groovy.erb: init.groovy.d/configure-access.groovy
+  config/configure-devsystems-creds.groovy.erb: init.groovy.d/configure-devsystems-creds.groovy
   config/configure-github-access.groovy.erb: init.groovy.d/configure-github-access.groovy
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
@@ -68,3 +69,9 @@ properties:
   jenkins.use_github_auth:
     description: "Jenkins github auth"
     default: "false"
+  jenkins.use_github_repos:
+    description: "A boolean indicating whether to use GitHub Enterprise repos"
+    default: "false"
+  jenkins.github.devsystems.ssh:
+    description: "Github devsystems SSH key"
+    default: ""
