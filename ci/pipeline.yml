@@ -30,12 +30,6 @@ resources:
     uri: ((bbl-state.url))
     username: ((git-credentials.username))
     password: ((git-credentials.password))
-- name: bosh-bootloader
-  type: git
-  source:
-    branch: master
-    uri: https://github.com/cloudfoundry/bosh-bootloader.git
-    tag_filter: "v6.6.4"
 - name: bosh-deployment
   type: bosh-deployment
 - name: cf-deployment-concourse-tasks
@@ -43,7 +37,7 @@ resources:
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
-    tag_filter: "v6.7"
+    tag_filter: v6.*
 - name: concourse-tasks
   type: git
   source:
@@ -169,7 +163,6 @@ jobs:
   plan:
   - aggregate:
     - get: bbl-state
-    - get: bosh-bootloader
     - get: cf-deployment-concourse-tasks
     - get: concourse-tasks
     - get: jenkins-boshrelease
