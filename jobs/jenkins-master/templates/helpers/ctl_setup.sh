@@ -80,7 +80,7 @@ then
   export JAVA_HOME="/var/vcap/packages/java7"
 fi
 
-export JENKINS_TMP_PATH="$HOME/tmp"
+export JENKINS_TMP_PATH="/var/vcap/tmp"
 export JAVA_OPTS="-Djava.io.tmpdir=$JENKINS_TMP_PATH"
 
 # setup CLASSPATH for all jars/ folders within packages
