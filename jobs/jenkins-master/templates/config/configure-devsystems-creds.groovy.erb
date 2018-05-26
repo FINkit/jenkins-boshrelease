@@ -12,19 +12,17 @@ globalDomain = Domain.global()
 
 if (GHE_DEVSYSTEMS_SSH_KEY.allWhitespace) {
   println 'jenkins.github.devsystems.ssh has no content'
+} else {
+  credentialsStore = Jenkins.instance.getExtensionList(SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH)[0].getStore()
 
-  System.exit(1)
+  credentials = new BasicSSHUserPrivateKey(
+                     CredentialsScope.GLOBAL, // scope
+                     'devsystems', // id
+                     '', // username
+                     new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(GHE_DEVSYSTEMS_SSH_KEY), // privateKeySource
+                     '', // passphrase
+                     'GitHub Enterprise devsystems SSH Key' // description
+                    )
+
+  credentialsStore.addCredentials(globalDomain, credentials)
 }
-
-credentialsStore = Jenkins.instance.getExtensionList(SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH)[0].getStore()
-
-credentials = new BasicSSHUserPrivateKey(
-                   CredentialsScope.GLOBAL, // scope
-                   'devsystems', // id
-                   '', // username
-                   new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(GHE_DEVSYSTEMS_SSH_KEY), // privateKeySource
-                   '', // passphrase
-                   'GitHub Enterprise devsystems SSH Key' // description
-                  )
-
-credentialsStore.addCredentials(globalDomain, credentials)
