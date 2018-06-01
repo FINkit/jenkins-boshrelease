@@ -32,7 +32,12 @@ run:
     sleep 10
 
     pushd /go/src/jenkins
+      for i in ${TEST_TAGS//,/ }
+      do
+        TAGS_STRING="${TAGS_STRING} -t $i"
+      done
+
       go get github.com/DATA-DOG/godog/cmd/godog
       set -e
-      godog -t @unit -t @jenkins
+      godog $TAGS_STRING
     popd

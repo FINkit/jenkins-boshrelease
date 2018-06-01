@@ -232,6 +232,7 @@ jobs:
           INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
           JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
           BOSH_LITE: true
+          TEST_TAGS: "@unit,@jenkins"
         on_success:
           put: bosh-deployment # Destroy Jenkins instance
           params:
