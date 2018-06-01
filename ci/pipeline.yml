@@ -227,6 +227,11 @@ jobs:
         file: jenkins-boshrelease/ci/tasks/test-jenkins.yml
         params:
           BOSH_DEPLOYMENT: *deployment-name
+          JENKINS_HOST: "http://localhost:8080"
+          NEXUS_HOST: "http://localhost:8081"
+          INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
+          JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
+          BOSH_LITE: true
         on_success:
           put: bosh-deployment # Destroy Jenkins instance
           params:
