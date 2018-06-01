@@ -14,22 +14,20 @@ run:
   - | 
     pushd bbl-state/bbl-state
       source <(bbl print-env)
-      JUMPBOX_USER="jumpbox"; export JUMPBOX_USER
-      JUMPBOX_HOST=$(bosh int <(bbl outputs) --path /jumpbox_url | cut -d: -f1); export JUMPBOX_HOST
-      # set up jumpbox ssh tunnel
-      instance_info=$(bosh --json instances -i); export instance_info
-      ip=$(jq --raw-output .Tables[0].Rows[0].ips <<< "$instance_info")
-      # shellcheck disable=SC2029
-      ssh -o StrictHostKeyChecking=no -fNnL "8080:$ip:8080" -i "$JUMPBOX_PRIVATE_KEY" "$JUMPBOX_USER@$JUMPBOX_HOST"
-      trap "pkill ssh" EXIT
-      credhub api --server=${CREDHUB_SERVER}
-      credhub login --username=${CREDHUB_USERNAME} --password=${CREDHUB_PASSWORD}
-      export JENKINS_PASSWORD=$(credhub get --name=/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password --output-json | jq --raw-output ".value" | tr --delete ' ')
-      export JENKINS_HOST="http://localhost:8080"
-      export NEXUS_HOST="http://localhost:8081" # TODO Refactor tests to remove dependency on Nexus in Jenkins unit tests.
+      if [[ $BOSH_LITE == true ]]; then
+        JUMPBOX_USER="jumpbox"; export JUMPBOX_USER
+        JUMPBOX_HOST=$(bosh int <(bbl outputs) --path /jumpbox_url | cut -d: -f1); export JUMPBOX_HOST
+        # set up jumpbox ssh tunnel
+        instance_info=$(bosh --json instances -i); export instance_info
+        ip=$(jq --raw-output .Tables[0].Rows[0].ips <<< "$instance_info")
+        # shellcheck disable=SC2029
+        ssh -o StrictHostKeyChecking=no -fNnL "8080:$ip:8080" -i "$JUMPBOX_PRIVATE_KEY" "$JUMPBOX_USER@$JUMPBOX_HOST"
+        trap "pkill ssh" EXIT
+      fi
+      export JENKINS_PASSWORD=$(credhub get --name=${JENKINS_PASSWORD_CREDHUB_PATH} --output-json | jq --raw-output ".value" | tr --delete ' ')
     popd
 
-    export INSTALLED_PLUGINS_FILE_PATH="${PWD}/jenkins-boshrelease/src/jenkins/plugins.txt"
+    export INSTALLED_PLUGINS_FILE_PATH="${PWD}/${INSTALLED_PLUGINS_FILE_PATH_SUFFIX}"
     cp -R devtools-tests/jenkins /go/src/
     sleep 10
 
