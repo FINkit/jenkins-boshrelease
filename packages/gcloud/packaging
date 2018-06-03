@@ -1,0 +1,5 @@
+set -e
+
+GCLOUD_VERSION=203.0.0
+
+tar xvfz gcloud/google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz --strip 1 -C ${BOSH_INSTALL_TARGET}

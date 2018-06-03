@@ -1,0 +1,7 @@
+---
+name: gcloud
+
+dependencies: []
+
+files:
+- gcloud/google-cloud-sdk-203.0.0-linux-x86_64.tar.gz
