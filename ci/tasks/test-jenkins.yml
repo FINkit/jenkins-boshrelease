@@ -28,7 +28,7 @@ run:
     popd
 
     export INSTALLED_PLUGINS_FILE_PATH="${PWD}/${INSTALLED_PLUGINS_FILE_PATH_SUFFIX}"
-    cp -R devtools-tests /go/src/
+    cp -R devtools-tests/* /go/src/
     sleep 10
 
     pushd /go/src
