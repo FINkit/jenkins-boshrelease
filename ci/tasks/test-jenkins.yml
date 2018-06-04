@@ -38,5 +38,5 @@ run:
       if [[ -n "$TEST_TAGS" ]]; then
         TAGS_STRING="-t $TEST_TAGS"
       fi
-      godog $TAGS_STRING features/**/*.feature # See godog --help, to understand how to apply tags.
+      godog "$TAGS_STRING" features/**/*.feature # See godog --help, to understand how to apply tags.
     popd
