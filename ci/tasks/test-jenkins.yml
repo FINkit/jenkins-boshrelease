@@ -34,5 +34,9 @@ run:
     pushd /go/src
       go get github.com/DATA-DOG/godog/cmd/godog
       set -e
-      godog $TEST_TAGS features/**/*.feature # See godog --help, to understand how to apply tags.
+      TAGS_STRING = ""
+      if [[ -n "$TEST_TAGS" ]]; then
+        TAGS_STRING = "-t $TEST_TAGS"
+      fi
+      godog $TAGS_STRING features/**/*.feature # See godog --help, to understand how to apply tags.
     popd
