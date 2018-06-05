@@ -196,6 +196,7 @@ jobs:
     - get: bbl-state
       passed:
       - setup-infrastructure
+    - get: concourse-tasks
     - get: cf-deployment-concourse-tasks
     - get: jenkins-boshrelease
       passed:
@@ -224,7 +225,7 @@ jobs:
           vars:
             deployment_name: *deployment-name
       - task: test-jenkins
-        file: jenkins-boshrelease/ci/tasks/test-jenkins.yml
+        file: concourse-tasks/tasks/run-devtools-tests/task.yml
         params:
           BOSH_DEPLOYMENT: *deployment-name
           JENKINS_HOST: "http://localhost:8080"
