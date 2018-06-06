@@ -30,10 +30,10 @@ if (GHE_DEVSYSTEMS_SSH_KEY.allWhitespace) {
 }
 
 // Add devsytems username/password credentials to Global Domain
-globalUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-global', '' , 'devsystems', 'keygoeshere')
+globalUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-global', '' , 'devsystems', GHE_DEVSYSTEMS_ACCESS_TOKEN)
 credentialsStore.addCredentials(Domain.global(), globalUnPwCredentials)
 
 /// Add devsystems username/password to GHE domain
-domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-github', '', 'devsystems', 'keygoeshere')
+domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-github', '', 'devsystems', GHE_DEVSYSTEMS_ACCESS_TOKEN)
 credentialsStore.addCredentials(new Domain(GHE_DOMAIN_NAME, null, Collections.emptyList()), domainUnPwCredentials)
 
