@@ -42,3 +42,7 @@ swarm-client/swarm-client-2.2-jar-with-dependencies.jar:
   size: 1385476
   object_id: 0955da33-cdff-4169-7914-fa46bfb086a9
   sha: 731ca367119d4b46421c70367111f4c9902a2cb7
+terraform/terraform_0.11.7_linux_amd64.zip:
+  size: 16490308
+  object_id: cff2eaff-828c-48ae-675d-103506b0ac97
+  sha: 5b2e6b61692c538afd9103741cd5092ef50d6723
