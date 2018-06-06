@@ -1,0 +1,4 @@
+set -e
+
+GOLANG_VERSION=1.9.6
+tar xvfz golang/go${GOLANG_VERSION}.linux-amd64.tar.gz --strip 1 -C ${BOSH_INSTALL_TARGET}
