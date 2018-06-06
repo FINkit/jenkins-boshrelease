@@ -6,6 +6,10 @@ cf-cli/cf-6.46.1.tgz:
   size: 5910456
   object_id: 4e1d0b05-5da2-41fd-4df8-f3c059c98240
   sha: faade069c0e7a76cb3bb1c9dfd69da2d340155c9
+gcloud/google-cloud-sdk-203.0.0-linux-x86_64.tar.gz:
+  size: 19974870
+  object_id: f494d99d-52b7-4574-432f-86fb77f3a2a0
+  sha: 78bc4bce8e3bdb2b33737348f16c543dcd9a6b68
 git/git-2.14.1.tar.gz:
   size: 6987933
   object_id: 4c11f3bb-d077-4a0d-6a81-2cb433fb2964

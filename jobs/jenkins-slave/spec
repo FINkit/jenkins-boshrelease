@@ -8,6 +8,7 @@ packages:
 - git-client
 - ansible
 - cf-cli
+- gcloud
 - terraform
 - golang
 
