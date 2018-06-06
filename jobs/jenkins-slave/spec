@@ -31,7 +31,7 @@ properties:
     description: "Name used when commiting to a git repository"
     default: "Jenkins CI"
   jenkins.gitconfig.email:
-    description: "Email used when commiting to a git repository
+    description: "Email used when commiting to a git repository"
     default: "jenkins@jenkinsci.local"
   jenkins.server.address:
     description: "Fully qualified address of Jenkins server"
