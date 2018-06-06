@@ -10,4 +10,7 @@ fi
 if [[ -d /var/vcap/jobs/jenkins-slave/packages/apache-maven/conf ]]; then
     mv /var/vcap/jobs/jenkins-slave/config/settings.xml /var/vcap/jobs/jenkins-slave/packages/apache-maven/conf/settings.xml
 fi
+
+mv /var/vcap/jobs/jenkins-slave/config/.gitconfig /home/vcap/
+chown vcap:vcap /home/vcap/.gitconfig
 chown -R vcap:vcap /var/vcap/data/jenkins-slave
