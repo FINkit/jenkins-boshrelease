@@ -75,3 +75,6 @@ properties:
   jenkins.github.devsystems.ssh:
     description: "Github devsystems SSH key"
     default: ""
+  jenkins.github.devsystems.access_token:
+    description: "Personal access token for devsystems GHE account"
+    default: ""

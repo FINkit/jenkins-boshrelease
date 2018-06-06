@@ -10,6 +10,10 @@ git/git-2.14.1.tar.gz:
   size: 6987933
   object_id: 4c11f3bb-d077-4a0d-6a81-2cb433fb2964
   sha: e173270a5f224078e3f6c639937da5bd84045225
+golang/go1.9.6.linux-amd64.tar.gz:
+  size: 118279574
+  object_id: 54d5f6e9-96a4-4bbc-7fcf-badfe6f4c045
+  sha: 012c86a6b555272fe36fb9cdb45082ffc5ea5c7c
 groovy/apache-groovy-binary-2.4.13.zip:
   size: 36587726
   object_id: 533334f0-f6e8-4959-6ce5-90687aa938c0
