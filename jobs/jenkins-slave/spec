@@ -22,6 +22,7 @@ templates:
   bin/monit_debugger: bin/monit_debugger
   data/properties.sh.erb: data/properties.sh
   config/settings.xml.erb: config/settings.xml
+  config/id_rsa.erb: config/id_rsa
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
@@ -40,3 +41,5 @@ properties:
     description: "Password of the user to connect to the master server"
   jenkins.slave.mode:
     description: "The mode to run the slave"
+  jenkins.slave.private_key:
+    description: "The private key used by the jenkins slave"
