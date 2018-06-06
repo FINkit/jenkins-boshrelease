@@ -1,20 +1,22 @@
 import jenkins.model.Jenkins
 import com.cloudbees.plugins.credentials.CredentialsScope
+import com.cloudbees.plugins.credentials.CredentialsStore
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey.DirectEntryPrivateKeySource
+import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 
 final String SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH = 'com.cloudbees.plugins.credentials.SystemCredentialsProvider'
-
 final String GHE_DEVSYSTEMS_SSH_KEY = '''<%= p('jenkins.github.devsystems.ssh') %>'''
+final String GHE_DOMAIN_NAME = 'github-dev.finkit.io'
+final String GHE_DEVSYSTEMS_ACCESS_TOKEN = '''<%= p('jenkins.github.devsystems.access_token') %>'''
 
 globalDomain = Domain.global()
+credentialsStore = Jenkins.instance.getExtensionList(SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH)[0].getStore()
 
 if (GHE_DEVSYSTEMS_SSH_KEY.allWhitespace) {
   println 'jenkins.github.devsystems.ssh has no content'
 } else {
-  credentialsStore = Jenkins.instance.getExtensionList(SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH)[0].getStore()
-
   credentials = new BasicSSHUserPrivateKey(
                      CredentialsScope.GLOBAL, // scope
                      'devsystems', // id
@@ -26,3 +28,12 @@ if (GHE_DEVSYSTEMS_SSH_KEY.allWhitespace) {
 
   credentialsStore.addCredentials(globalDomain, credentials)
 }
+
+// Add devsytems username/password credentials to Global Domain
+globalUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-global', '' , 'devsystems', GHE_DEVSYSTEMS_ACCESS_TOKEN)
+credentialsStore.addCredentials(Domain.global(), globalUnPwCredentials)
+
+/// Add devsystems username/password to GHE domain
+domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-github', '', 'devsystems', GHE_DEVSYSTEMS_ACCESS_TOKEN)
+credentialsStore.addCredentials(new Domain(GHE_DOMAIN_NAME, null, Collections.emptyList()), domainUnPwCredentials)
+
