@@ -9,6 +9,8 @@ packages:
 - ansible
 - cf-cli
 - gcloud
+- terraform
+- golang
 
 consumes:
 - name: jenkins_master
