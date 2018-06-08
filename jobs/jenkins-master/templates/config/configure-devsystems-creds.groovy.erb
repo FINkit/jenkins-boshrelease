@@ -8,7 +8,7 @@ import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 
 final String SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH = 'com.cloudbees.plugins.credentials.SystemCredentialsProvider'
 final String GHE_DEVSYSTEMS_SSH_KEY = '''<%= p('jenkins.github.devsystems.ssh') %>'''
-final String GHE_DOMAIN_NAME = 'github-dev.finkit.io'
+final String GHE_DOMAIN_NAME = '''<%= p('jenkins.github.oauth.url.web') %>'''.replace('https://', '')
 final String GHE_DEVSYSTEMS_ACCESS_TOKEN = '''<%= p('jenkins.github.devsystems.access_token') %>'''
 
 globalDomain = Domain.global()
@@ -33,7 +33,10 @@ if (GHE_DEVSYSTEMS_SSH_KEY.allWhitespace) {
 globalUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-global', '' , 'devsystems', GHE_DEVSYSTEMS_ACCESS_TOKEN)
 credentialsStore.addCredentials(Domain.global(), globalUnPwCredentials)
 
+// Add GHE Domain
+gheDomain = new Domain(GHE_DOMAIN_NAME, null, Collections.emptyList())
+credentialsStore.addDomain(gheDomain, Collections.emptyList())
+
 /// Add devsystems username/password to GHE domain
 domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, 'devsystems-unpw-github', '', 'devsystems', GHE_DEVSYSTEMS_ACCESS_TOKEN)
-credentialsStore.addCredentials(new Domain(GHE_DOMAIN_NAME, null, Collections.emptyList()), domainUnPwCredentials)
-
+credentialsStore.addCredentials(gheDomain, domainUnPwCredentials)
