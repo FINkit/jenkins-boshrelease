@@ -30,6 +30,13 @@ resources:
     uri: ((bbl-state.url))
     username: ((git-credentials.username))
     password: ((git-credentials.password))
+- name: read-snapshot-versions
+  type: git
+  source:
+    private_key: ((buildstack-pipeline-versions.key))
+    uri: ((buildstack-pipeline-versions.uri))
+    paths:
+    - initial-versions.yml
 - name: bosh-deployment
   type: bosh-deployment
 - name: cf-deployment-concourse-tasks
@@ -37,7 +44,7 @@ resources:
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
-    tag_filter: v6.*
+    tag_filter: ((resource_version_cf-deployment-concourse-tasks.ref))
 - name: concourse-tasks
   type: git
   source:
@@ -127,6 +134,7 @@ groups:
 jobs:
 - name: set-pipeline
   plan:
+  - get: read-snapshot-versions
   - get: jenkins-boshrelease
     trigger: true
   - put: set-pipeline
@@ -135,6 +143,8 @@ jobs:
       - name: jenkins-boshrelease
         team: ((concourse-auth.team))
         config_file: jenkins-boshrelease/ci/pipeline.yml
+        vars-files:
+        - read-snapshot-versions/initial-versions.yml
   <<: &slack-alert
     on_failure:
       put: slack-alert
