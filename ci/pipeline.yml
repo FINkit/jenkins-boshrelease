@@ -86,7 +86,7 @@ resources:
       owner: finkit
       repository: jenkins-boshrelease
       access_token: ((github-access-token))
-    # "pre_release: true" is not effective on it's own, "release: false" must also be set
+    # "pre_release: true" is not effective on it's own, "release: false" must also be set.
     # https://github.com/concourse/github-release-resource/issues/40
     pre_release: true
     release: false
@@ -143,7 +143,7 @@ jobs:
       - name: jenkins-boshrelease
         team: ((concourse-auth.team))
         config_file: jenkins-boshrelease/ci/pipeline.yml
-        vars-files:
+        vars_files:
         - read-snapshot-versions/initial-versions.yml
   <<: &slack-alert
     on_failure:
