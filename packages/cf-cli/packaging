@@ -3,4 +3,5 @@ set -i
 cd cf-cli
 tar -xzvf cf-*.tgz
 chmod +x cf
-cp cf -v  ${BOSH_INSTALL_TARGET}
+mkdir -p ${BOSH_INSTALL_TARGET}/bin
+cp cf -v  ${BOSH_INSTALL_TARGET}/bin
