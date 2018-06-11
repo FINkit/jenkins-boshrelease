@@ -240,6 +240,7 @@ jobs:
           BOSH_DEPLOYMENT: *deployment-name
           BOSH_LITE: true
           INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
+          JENKINS_GITHUB_AUTH_PARAM: "local"
           JENKINS_HOST: "http://localhost:8080"
           JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
           TEST_TAGS: "@unit && @jenkins"
