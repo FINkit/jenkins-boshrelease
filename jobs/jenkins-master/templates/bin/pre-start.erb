@@ -30,7 +30,7 @@ if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
 fi
 
 if [ ${JENKINS_USE_GITHUB_REPOS} == "true" ]; then
-    cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-devsystems-creds.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-devsystems-creds.groovy
+    cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-github-integration-creds.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-github-integration-creds.groovy
 fi
 
 echo "Configuring Plugins..."
