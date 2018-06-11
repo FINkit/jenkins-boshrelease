@@ -72,9 +72,9 @@ properties:
   jenkins.use_github_repos:
     description: "A boolean indicating whether to use GitHub Enterprise repos"
     default: "false"
-  jenkins.github.devsystems.ssh:
-    description: "Github devsystems SSH key"
+  jenkins.github.integration_user.ssh:
+    description: "Github integration user SSH key"
     default: ""
-  jenkins.github.devsystems.access_token:
-    description: "Personal access token for devsystems GHE account"
+  jenkins.github.integration_user.access_token:
+    description: "Personal access token for integration user GHE account"
     default: ""
