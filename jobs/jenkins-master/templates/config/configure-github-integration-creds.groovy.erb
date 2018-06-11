@@ -23,7 +23,7 @@ if (GHE_SSH_KEY.allWhitespace) {
 } else {
   credentials = new BasicSSHUserPrivateKey(
                      CredentialsScope.GLOBAL,
-                     '<%= p('jenkins.github.integration_user') %>',
+                     GHE_INTEGRATION_USER,
                      '',
                      new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(GHE_SSH_KEY),
                      '', // passphrase
