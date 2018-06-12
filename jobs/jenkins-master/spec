@@ -20,6 +20,7 @@ templates:
   bin/restore.sh.erb: bin/bbr/restore
   config/branding.css.erb: config/branding.css
   config/config.xml.erb: config/config.xml
+  config/configure-mail.groovy.erb: init.groovy.d/configure-mail.groovy
   config/configure-access.groovy.erb: init.groovy.d/configure-access.groovy
   config/configure-github-integration-creds.groovy.erb: init.groovy.d/configure-github-integration-creds.groovy
   config/configure-github-access.groovy.erb: init.groovy.d/configure-github-access.groovy
@@ -47,6 +48,18 @@ properties:
         description: Default test credentials
         username: test
         password: password
+  jenkins.smtp.host:
+    description: "Host address of the smtp server"
+    default: "smtp.mail-server.com"
+  jenkins.smtp.port:
+    description: "Port of the smtp server"
+    default: 25
+  jenkins.smtp.reply:
+    description: "Reply to address for mail sending"
+    default: "jenkins@jeninsci.com"
+  jenkins.smtp.ssl:
+    description: "Boolean toggle for ssl"
+    default: false
   jenkins.server.address:
     description: "Fully qualified address of Jenkins server"
     default: "127.0.0.1:8080"

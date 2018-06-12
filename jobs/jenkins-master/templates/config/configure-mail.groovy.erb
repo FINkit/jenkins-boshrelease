@@ -1,0 +1,11 @@
+import jenkins.model.*
+import hudson.tasks.*
+
+def instance = Jenkins.getInstance()
+def mailDescriptor = instance.getDescriptor("hudson.tasks.Mailer")
+mailDescriptor.setSmtpHost('<%= p('jenkins.smtp.host') %>')
+mailDescriptor.setSmtpPort('<%= p('jenkins.smtp.port') %>')
+mailDescriptor.setReplyToAddress('<%= p('jenkins.smtp.reply') %>')
+mailDescriptor.setUseSsl('<%= p('jenkins.smtp.ssl') %>')
+
+instance.save()
