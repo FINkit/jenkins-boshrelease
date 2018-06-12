@@ -56,7 +56,7 @@ resources:
   source:
       uri: git@github.com:finkit/jenkins-boshrelease
       branch: master
-      private_key: ((github-deploy-key.private))
+      private_key: ((jenkins_boshrelease_github_deploy_key.private))
 - name: devtools-tests
   type: git
   source:
