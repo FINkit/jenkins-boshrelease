@@ -23,6 +23,7 @@ templates:
   config/configure-access.groovy.erb: init.groovy.d/configure-access.groovy
   config/configure-github-integration-creds.groovy.erb: init.groovy.d/configure-github-integration-creds.groovy
   config/configure-github-access.groovy.erb: init.groovy.d/configure-github-access.groovy
+  config/configure-credentials.groovy.erb: init.groovy.d/configure-credentials.groovy
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
   config/envInject.xml.erb: config/envInject.xml
@@ -39,6 +40,13 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 properties:
+  jenkins.credentials:
+    description: "List of required credentials to be auto added into Jenkins credential store"
+    default: |
+      - id: test-credential
+        description: Default test credentials
+        username: test
+        password: password
   jenkins.server.address:
     description: "Fully qualified address of Jenkins server"
     default: "127.0.0.1:8080"
