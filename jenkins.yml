@@ -34,6 +34,7 @@ instance_groups:
           master_password: ((jenkins_agent_password))
           master_username: agent
           mode: exclusive
+          private_key: ((jenkins_slave_ssh.private_key))
   networks:
   - name: default
   stemcell: default
@@ -59,3 +60,5 @@ variables:
   type: password
 - name: jenkins_agent_password
   type: password
+- name: jenkins_slave_ssh
+  type: ssh
