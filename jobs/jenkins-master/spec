@@ -99,3 +99,24 @@ properties:
   jenkins.github.integration_user.access_token:
     description: "Personal access token for integration user GHE account"
     default: ""
+  jenkins.github.oauth.repository.perms:
+    description: "Use Github repository permissions"
+    default: false
+  jenkins.github.oauth.auth.read:
+    description: "Grant READ permissions to all Authenticated Users"
+    default: true
+  jenkins.github.oauth.auth.create:
+    description: "Grant CREATE Job permissions to all Authenticated Users"
+    default: false
+  jenkins.github.oauth.webhook.perms:
+    description: "Grant READ permissions for /github-webhook"
+    default: false
+  jenkins.github.oauth.tray.perms:
+    description: "Grant READ permissions for /cc.xml"
+    default: false
+  jenkins.github.oauth.anon.read:
+    description: "Grant READ permissions for Anonymous Users"
+    default: false
+  jenkins.github.oauth.anon.job.status:
+    description: "Grant ViewStatus permissions for Anonymous Users"
+    default: false
