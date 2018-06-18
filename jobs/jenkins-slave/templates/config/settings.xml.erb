@@ -2,12 +2,17 @@
 	<% if_link('nexus') do |nexus| %>
     <servers>
         <server>
-            <id>releases-libs</id>
+            <id>nexus-central</id>
             <username><%= nexus.p("nexus.deployer.username") %></username>
             <password><%= nexus.p("nexus.deployer.password") %></password>
         </server>
         <server>
-            <id>snapshots-libs</id>
+            <id>internal-releases</id>
+            <username><%= nexus.p("nexus.deployer.username") %></username>
+            <password><%= nexus.p("nexus.deployer.password") %></password>
+        </server>
+        <server>
+            <id>internal-snapshots</id>
             <username><%= nexus.p("nexus.deployer.username") %></username>
             <password><%= nexus.p("nexus.deployer.password") %></password>
         </server>

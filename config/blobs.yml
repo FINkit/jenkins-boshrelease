@@ -6,10 +6,18 @@ cf-cli/cf-6.46.1.tgz:
   size: 5910456
   object_id: 4e1d0b05-5da2-41fd-4df8-f3c059c98240
   sha: faade069c0e7a76cb3bb1c9dfd69da2d340155c9
+gcloud/google-cloud-sdk-203.0.0-linux-x86_64.tar.gz:
+  size: 19974870
+  object_id: f494d99d-52b7-4574-432f-86fb77f3a2a0
+  sha: 78bc4bce8e3bdb2b33737348f16c543dcd9a6b68
 git/git-2.14.1.tar.gz:
   size: 6987933
   object_id: 4c11f3bb-d077-4a0d-6a81-2cb433fb2964
   sha: e173270a5f224078e3f6c639937da5bd84045225
+golang/go1.9.6.linux-amd64.tar.gz:
+  size: 118279574
+  object_id: 54d5f6e9-96a4-4bbc-7fcf-badfe6f4c045
+  sha: 012c86a6b555272fe36fb9cdb45082ffc5ea5c7c
 groovy/apache-groovy-binary-2.4.13.zip:
   size: 36587726
   object_id: 533334f0-f6e8-4959-6ce5-90687aa938c0
@@ -38,3 +46,7 @@ swarm-client/swarm-client-2.2-jar-with-dependencies.jar:
   size: 1385476
   object_id: 0955da33-cdff-4169-7914-fa46bfb086a9
   sha: 731ca367119d4b46421c70367111f4c9902a2cb7
+terraform/terraform_0.11.7_linux_amd64.zip:
+  size: 16490308
+  object_id: cff2eaff-828c-48ae-675d-103506b0ac97
+  sha: 5b2e6b61692c538afd9103741cd5092ef50d6723

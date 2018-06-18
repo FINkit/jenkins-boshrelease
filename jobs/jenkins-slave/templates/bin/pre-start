@@ -13,4 +13,10 @@ fi
 
 mv /var/vcap/jobs/jenkins-slave/config/.gitconfig /home/vcap/
 chown vcap:vcap /home/vcap/.gitconfig
+mkdir -p /home/vcap/.ssh
+if [[ -d /home/vcap/.ssh ]]; then
+  mv /var/vcap/jobs/jenkins-slave/config/id_rsa /home/vcap/.ssh/
+  chown -R vcap:vcap /home/vcap/.ssh
+fi
+
 chown -R vcap:vcap /var/vcap/data/jenkins-slave

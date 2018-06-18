@@ -1,0 +1,5 @@
+---
+name: terraform
+
+files:
+- terraform/terraform_0.11.7_linux_amd64.zip

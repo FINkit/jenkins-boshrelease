@@ -30,6 +30,13 @@ resources:
     uri: ((bbl-state.url))
     username: ((git-credentials.username))
     password: ((git-credentials.password))
+- name: read-snapshot-versions
+  type: git
+  source:
+    private_key: ((buildstack-pipeline-versions.key))
+    uri: ((buildstack-pipeline-versions.uri))
+    paths:
+    - initial-versions.yml
 - name: bosh-deployment
   type: bosh-deployment
 - name: cf-deployment-concourse-tasks
@@ -37,7 +44,7 @@ resources:
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
-    tag_filter: v6.*
+    tag_filter: ((resource_version_cf-deployment-concourse-tasks.ref))
 - name: concourse-tasks
   type: git
   source:
@@ -49,7 +56,7 @@ resources:
   source:
       uri: git@github.com:finkit/jenkins-boshrelease
       branch: master
-      private_key: ((github-deploy-key.private))
+      private_key: ((jenkins_boshrelease_github_deploy_key.private))
 - name: devtools-tests
   type: git
   source:
@@ -79,7 +86,7 @@ resources:
       owner: finkit
       repository: jenkins-boshrelease
       access_token: ((github-access-token))
-    # "pre_release: true" is not effective on it's own, "release: false" must also be set
+    # "pre_release: true" is not effective on it's own, "release: false" must also be set.
     # https://github.com/concourse/github-release-resource/issues/40
     pre_release: true
     release: false
@@ -127,6 +134,7 @@ groups:
 jobs:
 - name: set-pipeline
   plan:
+  - get: read-snapshot-versions
   - get: jenkins-boshrelease
     trigger: true
   - put: set-pipeline
@@ -135,6 +143,8 @@ jobs:
       - name: jenkins-boshrelease
         team: ((concourse-auth.team))
         config_file: jenkins-boshrelease/ci/pipeline.yml
+        vars_files:
+        - read-snapshot-versions/initial-versions.yml
   <<: &slack-alert
     on_failure:
       put: slack-alert
@@ -228,11 +238,11 @@ jobs:
         file: concourse-tasks/tasks/run-devtools-tests/task.yml
         params:
           BOSH_DEPLOYMENT: *deployment-name
-          JENKINS_HOST: "http://localhost:8080"
-          NEXUS_HOST: "http://localhost:8081"
-          INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
-          JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
           BOSH_LITE: true
+          INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
+          JENKINS_AUTH_METHOD: "local"
+          JENKINS_HOST: "http://localhost:8080"
+          JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
           TEST_TAGS: "@unit && @jenkins"
         on_success:
           put: bosh-deployment # Destroy Jenkins instance

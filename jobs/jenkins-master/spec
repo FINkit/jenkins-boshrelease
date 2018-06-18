@@ -20,9 +20,11 @@ templates:
   bin/restore.sh.erb: bin/bbr/restore
   config/branding.css.erb: config/branding.css
   config/config.xml.erb: config/config.xml
+  config/configure-mail.groovy.erb: init.groovy.d/configure-mail.groovy
   config/configure-access.groovy.erb: init.groovy.d/configure-access.groovy
-  config/configure-devsystems-creds.groovy.erb: init.groovy.d/configure-devsystems-creds.groovy
+  config/configure-github-integration-creds.groovy.erb: init.groovy.d/configure-github-integration-creds.groovy
   config/configure-github-access.groovy.erb: init.groovy.d/configure-github-access.groovy
+  config/configure-credentials.groovy.erb: init.groovy.d/configure-credentials.groovy
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
   config/envInject.xml.erb: config/envInject.xml
@@ -39,6 +41,25 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 properties:
+  jenkins.credentials:
+    description: "List of required credentials to be auto added into Jenkins credential store"
+    default: |
+      - id: test-credential
+        description: Default test credentials
+        username: test
+        password: password
+  jenkins.smtp.host:
+    description: "Host address of the smtp server"
+    default: "smtp.mail-server.com"
+  jenkins.smtp.port:
+    description: "Port of the smtp server"
+    default: 25
+  jenkins.smtp.reply:
+    description: "Reply to address for mail sending"
+    default: "jenkins@jeninsci.com"
+  jenkins.smtp.ssl:
+    description: "Boolean toggle for ssl"
+    default: false
   jenkins.server.address:
     description: "Fully qualified address of Jenkins server"
     default: "127.0.0.1:8080"
@@ -72,9 +93,30 @@ properties:
   jenkins.use_github_repos:
     description: "A boolean indicating whether to use GitHub Enterprise repos"
     default: "false"
-  jenkins.github.devsystems.ssh:
-    description: "Github devsystems SSH key"
+  jenkins.github.integration_user.ssh:
+    description: "Github integration user SSH key"
     default: ""
-  jenkins.github.devsystems.access_token:
-    description: "Personal access token for devsystems GHE account"
+  jenkins.github.integration_user.access_token:
+    description: "Personal access token for integration user GHE account"
     default: ""
+  jenkins.github.oauth.repository.perms:
+    description: "Use Github repository permissions"
+    default: false
+  jenkins.github.oauth.auth.read:
+    description: "Grant READ permissions to all Authenticated Users"
+    default: true
+  jenkins.github.oauth.auth.create:
+    description: "Grant CREATE Job permissions to all Authenticated Users"
+    default: false
+  jenkins.github.oauth.webhook.perms:
+    description: "Grant READ permissions for /github-webhook"
+    default: false
+  jenkins.github.oauth.tray.perms:
+    description: "Grant READ permissions for /cc.xml"
+    default: false
+  jenkins.github.oauth.anon.read:
+    description: "Grant READ permissions for Anonymous Users"
+    default: false
+  jenkins.github.oauth.anon.job.status:
+    description: "Grant ViewStatus permissions for Anonymous Users"
+    default: false

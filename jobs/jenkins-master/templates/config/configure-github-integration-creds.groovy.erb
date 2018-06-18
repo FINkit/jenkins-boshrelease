@@ -1,0 +1,54 @@
+import jenkins.model.Jenkins
+import com.cloudbees.plugins.credentials.CredentialsScope
+import com.cloudbees.plugins.credentials.CredentialsStore
+import com.cloudbees.plugins.credentials.domains.Domain
+import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
+import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey.DirectEntryPrivateKeySource
+import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
+import org.jenkinsci.plugins.plaincredentials.*
+import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
+import hudson.util.Secret
+
+final String SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH = 'com.cloudbees.plugins.credentials.SystemCredentialsProvider'
+final String GHE_SSH_KEY = '''<%= p('jenkins.github.integration_user.ssh') %>'''
+final String GHE_DOMAIN_NAME = '''<%= p('jenkins.github.oauth.url.web') %>'''.replace('https://', '')
+final String GHE_ACCESS_TOKEN = '''<%= p('jenkins.github.integration_user.access_token') %>'''
+final String GHE_INTEGRATION_USER = '''<%= p('jenkins.github.integration_user') %>'''
+
+globalDomain = Domain.global()
+credentialsStore = Jenkins.instance.getExtensionList(SYSTEM_CREDENTIALS_PROVIDER_CLASSPATH)[0].getStore()
+
+if (GHE_SSH_KEY.allWhitespace) {
+  println 'jenkins.github.integration_user.ssh has no content'
+} else {
+  credentials = new BasicSSHUserPrivateKey(
+                     CredentialsScope.GLOBAL,
+                     GHE_INTEGRATION_USER,
+                     '',
+                     new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(GHE_SSH_KEY),
+                     '', // passphrase
+                     'GitHub Enterprise SSH Key'
+                    )
+
+  credentialsStore.addCredentials(globalDomain, credentials)
+}
+
+// Add username/password credentials to Global Domain
+globalUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-global-domain-credential', '' , '<%= p('jenkins.github.integration_user') %>', GHE_ACCESS_TOKEN)
+credentialsStore.addCredentials(Domain.global(), globalUnPwCredentials)
+
+// Add text secret credentials to Global Domain
+globalStringCredentials = new StringCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-global-domain-secret', '', Secret.fromString(GHE_ACCESS_TOKEN))
+credentialsStore.addCredentials(Domain.global(), globalStringCredentials)
+
+// Add GHE Domain
+gheDomain = new Domain(GHE_DOMAIN_NAME, null, Collections.emptyList())
+credentialsStore.addDomain(gheDomain, Collections.emptyList())
+
+/// Add username/password credentials to GHE domain
+domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-github-domain-credential', '', '<%= p('jenkins.github.integration_user') %>', Secret.fromString(GHE_ACCESS_TOKEN))
+credentialsStore.addCredentials(gheDomain, domainUnPwCredentials)
+
+// Add text secret credentials to GHE Domain
+gheStringCredentials = new StringCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-github-domain-secret', '', GHE_ACCESS_TOKEN)
+credentialsStore.addCredentials(gheDomain, gheStringCredentials)
