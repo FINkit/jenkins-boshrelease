@@ -24,12 +24,19 @@ templates:
   bin/pre-start: bin/pre-start
   bin/monit_debugger: bin/monit_debugger
   data/properties.sh.erb: data/properties.sh
+  config/.gitconfig.erb: config/.gitconfig
   config/settings.xml.erb: config/settings.xml
   config/id_rsa.erb: config/id_rsa
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
 properties:
+  jenkins.gitconfig.name:
+    description: "Name used when commiting to a git repository"
+    default: "Jenkins CI"
+  jenkins.gitconfig.email:
+    description: "Email used when commiting to a git repository"
+    default: "jenkins@jenkinsci.local"
   jenkins.server.address:
     description: "Fully qualified address of Jenkins server"
   jenkins.admin.password:
