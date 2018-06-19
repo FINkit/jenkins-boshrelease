@@ -53,3 +53,6 @@ properties:
     description: "The mode to run the slave"
   jenkins.slave.private_key:
     description: "The private key used by the jenkins slave"
+  jenkins.slave.type:
+    description: "The type of the slave"
+    default: "localhost"
