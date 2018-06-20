@@ -4,4 +4,4 @@ dependencies:
 - oraclejdk
 files:
 - jenkins/jenkins_2.107.2.war
-- jenkins/plugins-201806201028.zip
+- jenkins/plugins-201806201558.zip
