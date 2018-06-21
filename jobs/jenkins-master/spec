@@ -48,6 +48,7 @@ properties:
         description: Default test credentials
         username: test
         password: password
+        type: UsernamePasswordCredentialImpl
   jenkins.smtp.host:
     description: "Host address of the smtp server"
     default: "smtp.mail-server.com"
