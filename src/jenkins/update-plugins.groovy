@@ -30,7 +30,7 @@ assert !'4.1'.isLaterVersionThan('5')
 assert !'02.2.02.01'.isLaterVersionThan('02.2.02.03')
 assert !'1.625.3'.isLaterVersionThan('2.60.2')
 
-def jenkinsVersion = '2.107.1'
+def jenkinsVersion = '2.121.1'
 def plugins = [:]
 new File('plugins.txt').readLines().each{ plugins.put( it.split(':')[0] , it.split(':')[1] ) }
 
