@@ -27,6 +27,7 @@ templates:
   config/configure-credentials.groovy.erb: init.groovy.d/configure-credentials.groovy
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
+  config/configure-slack.groovy.erb: init.groovy.d/configure-slack.groovy
   config/envInject.xml.erb: config/envInject.xml
   config/envinject-plugin-configuration.xml.erb: config/envinject-plugin-configuration.xml
   config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml.erb: config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml
@@ -127,3 +128,12 @@ properties:
   jenkins.github.oauth.anon.job.status:
     description: "Grant ViewStatus permissions for Anonymous Users"
     default: false
+  jenkins.slack.base_url:
+    description: "Slack Base URL"
+    default: ""
+  jenkins.slack.team_subdomain:
+    description: "Slack Team Subdomain"
+    default: ""
+  jenkins.slack.channel:
+    description: "Slack channel"
+    default: ""
