@@ -57,8 +57,10 @@ properties:
     default: 25
   jenkins.smtp.username:
     description: "Username for your SMTP server"
+    default: ""
   jenkins.smtp.password:
     description: "Password for your SMTP server"
+    default: ""
   jenkins.smtp.reply:
     description: "Reply to address for mail sending"
     default: "jenkins@jeninsci.com"
