@@ -19,13 +19,13 @@ if(!github_realm.equals(Jenkins.instance.getSecurityRealm())) {
 
 String adminUserNames = '<%= p('jenkins.github.oauth.admins') %>'
 String organizationNames = '<%= p('jenkins.github.oauth.org_name') %>'
-boolean useRepositoryPermissions = '<%= p('jenkins.github.oauth.repository.perms') %>'
-boolean authenticatedUserReadPermission = '<%= p('jenkins.github.oauth.auth.read') %>'
-boolean authenticatedUserCreateJobPermission = '<%= p('jenkins.github.oauth.auth.create') %>'
-boolean allowGithubWebHookPermission = '<%= p('jenkins.github.oauth.webhook.perms') %>'
-boolean allowCcTrayPermission = '<%= p('jenkins.github.oauth.tray.perms') %>'
-boolean allowAnonymousReadPermission = '<%= p('jenkins.github.oauth.anon.read') %>'
-boolean allowAnonymousJobStatusPermission = '<%= p('jenkins.github.oauth.anon.job.status') %>'
+boolean useRepositoryPermissions = <%= p('jenkins.github.oauth.repository.perms') %>
+boolean authenticatedUserReadPermission = <%= p('jenkins.github.oauth.auth.read') %>
+boolean authenticatedUserCreateJobPermission = <%= p('jenkins.github.oauth.auth.create') %>
+boolean allowGithubWebHookPermission = <%= p('jenkins.github.oauth.webhook.perms') %>
+boolean allowCcTrayPermission = <%= p('jenkins.github.oauth.tray.perms') %>
+boolean allowAnonymousReadPermission = <%= p('jenkins.github.oauth.anon.read') %>
+boolean allowAnonymousJobStatusPermission = <%= p('jenkins.github.oauth.anon.job.status') %>
 
 AuthorizationStrategy github_authorization = new GithubAuthorizationStrategy(adminUserNames,
     authenticatedUserReadPermission,
