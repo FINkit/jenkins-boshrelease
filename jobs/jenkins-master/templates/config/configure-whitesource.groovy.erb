@@ -1,0 +1,23 @@
+import net.sf.json.JSONObject
+import org.whitesource.jenkins.WhiteSourcePublisher
+import jenkins.model.*
+
+JSONObject formData = [
+  'apiToken': '<%= p('jenkins.whitesource.job_api_token') %>',
+  'serviceUrl': '',
+  'checkPolicies': '',
+  'failOnError': false,
+  'globalForceUpdate': false,
+  'connectionTimeout': <%= p('jenkins.whitesource.connection_timeout') %>,
+] as JSONObject
+
+def whiteSource = Jenkins.instance.getExtensionList(
+  org.whitesource.jenkins.WhiteSourcePublisher.DescriptorImpl.class
+)[0]
+
+def req = [] as org.kohsuke.stapler.StaplerRequest
+
+whiteSource.configure(req, formData)
+whiteSource.save()
+
+println 'WhiteSource global settings configured.'

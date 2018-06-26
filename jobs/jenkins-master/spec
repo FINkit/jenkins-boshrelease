@@ -28,6 +28,7 @@ templates:
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
   config/configure-slack.groovy.erb: init.groovy.d/configure-slack.groovy
+  config/configure-whitesource.groovy.erb: init.groovy.d/configure-whitesource.groovy
   config/envInject.xml.erb: config/envInject.xml
   config/envinject-plugin-configuration.xml.erb: config/envinject-plugin-configuration.xml
   config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml.erb: config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml
@@ -137,3 +138,9 @@ properties:
   jenkins.slack.channel:
     description: "Slack channel"
     default: ""
+  jenkins.whitesource.job_api_token:
+    description: "Whitesource Job API token"
+    default: ""
+  jenkins.whitesource.connection_timeout:
+    description: "Whitesource connection timeout"
+    default: 60
