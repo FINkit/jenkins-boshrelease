@@ -9,7 +9,7 @@ def slack = Jenkins.instance.getExtensionList(
 
 def params = [
   slackBaseUrl: '<%= p('jenkins.slack.base_url') %>',
-  slackTeamDomain: '<%= p('jenkins.slack.team_subdomain') %>'
+  slackTeamDomain: '<%= p('jenkins.slack.team_subdomain') %>',
   slackRoom: '<%= p('jenkins.slack.channel') %>'
 ]
 
