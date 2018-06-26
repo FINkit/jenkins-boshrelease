@@ -2,4 +2,4 @@ set -e
 
 ANSIBLE_VERSION=v2.5.2
 
-tar xvfz ansible/ansible-${ANSIBLE_VERSION}.tar.gz -C ${BOSH_INSTALL_TARGET}
+tar xvfz ansible/ansible-${ANSIBLE_VERSION}.tar.gz --strip-components=1 -C ${BOSH_INSTALL_TARGET}
