@@ -154,9 +154,9 @@ properties:
   sonar.service.version:
     description: "Sonar service version"
     default: "5.2"
-  sonar.username:
-    description: "Sonar username"
+  sonar.jenkins.username:
+    description: "Sonar username for Jenkins user"
     default: ""
-  sonar.password:
-    description: "Sonar password"
+  sonar.jenkins.password:
+    description: "Sonar password for Jenkins user"
     default: ""

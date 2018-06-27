@@ -18,8 +18,8 @@ def sonarInstallation = new SonarInstallation(
   "", // mojoVersion, 
   "", // additionalProperties, 
   new TriggersConfig(), // triggers,
-  '<%= p('sonar.username') %>', // sonarLogin, 
-  '<%= p('sonar.password') %>', // sonarPassword, 
+  '<%= p('sonar.jenkins.username') %>', // sonarLogin,
+  '<%= p('sonar.jenkins.password') %>', // sonarPassword,
   "" // additionalAnalysisProperties
 )
 
