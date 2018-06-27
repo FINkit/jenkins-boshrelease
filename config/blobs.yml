@@ -14,6 +14,10 @@ git/git-2.14.1.tar.gz:
   size: 6987933
   object_id: 4c11f3bb-d077-4a0d-6a81-2cb433fb2964
   sha: e173270a5f224078e3f6c639937da5bd84045225
+github/github-v1.29.2.tar.gz:
+  size: 113680
+  object_id: 9bd411b1-7b15-4148-7864-4756f754c5a2
+  sha: a8987fac0383ddf782dfee6aa3412874b4cca7bc
 golang/go1.9.6.linux-amd64.tar.gz:
   size: 118279574
   object_id: 54d5f6e9-96a4-4bbc-7fcf-badfe6f4c045

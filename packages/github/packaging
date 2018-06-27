@@ -1,0 +1,5 @@
+set -e
+
+GITHUB_VERSION=v1.29.2
+
+tar xvfz github/github-${GITHUB_VERSION}.tar.gz --strip-components=1 -C ${BOSH_INSTALL_TARGET}
