@@ -1,0 +1,29 @@
+import jenkins.model.*
+import hudson.tasks.*
+import hudson.plugins.sonar.*
+import hudson.plugins.sonar.model.*
+
+println "Configuring Sonar..."
+def instance = Jenkins.getInstance()
+def descriptor = instance.getDescriptor("hudson.plugins.sonar.SonarGlobalConfiguration")
+
+def sonarInstallation = new SonarInstallation(
+  '<%= p('sonar.installation.name') %>', //name
+  '<%= p('sonar.server.url') %>', //serverUrl
+  '<%= p('sonar.service.version') %>', // serviceVersion
+  "", // serverAuthenticationToken,
+  "", // databaseUrl, 
+  "", // databaseLogin, 
+  "", // databasePassword,
+  "", // mojoVersion, 
+  "", // additionalProperties, 
+  new TriggersConfig(), // triggers,
+  '<%= p('sonar.jenkins.username') %>', // sonarLogin,
+  '<%= p('sonar.jenkins.password') %>', // sonarPassword,
+  "" // additionalAnalysisProperties
+)
+
+descriptor.setInstallations(sonarInstallation)
+descriptor.save()
+
+println "Configuring Sonar... COMPLETE"
