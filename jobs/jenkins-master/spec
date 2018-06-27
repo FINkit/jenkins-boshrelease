@@ -27,6 +27,7 @@ templates:
   config/configure-credentials.groovy.erb: init.groovy.d/configure-credentials.groovy
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
+  config/configure-sonar.groovy.erb: init.groovy.d/configure-sonar.groovy
   config/configure-slack.groovy.erb: init.groovy.d/configure-slack.groovy
   config/configure-whitesource.groovy.erb: init.groovy.d/configure-whitesource.groovy
   config/envInject.xml.erb: config/envInject.xml
@@ -65,7 +66,7 @@ properties:
     default: ""
   jenkins.smtp.reply:
     description: "Reply to address for mail sending"
-    default: "jenkins@jeninsci.com"
+    default: "jenkins@jenkinsci.com"
   jenkins.smtp.ssl:
     description: "Boolean toggle for ssl"
     default: false
@@ -144,3 +145,18 @@ properties:
   jenkins.whitesource.connection_timeout:
     description: "Whitesource connection timeout"
     default: 60
+  sonar.installation.name:
+    description: "Sonar installation name"
+    default: ""
+  sonar.server.url:
+    description: "Sonar server url"
+    default: ""
+  sonar.service.version:
+    description: "Sonar service version"
+    default: "5.2"
+  sonar.username:
+    description: "Sonar username"
+    default: ""
+  sonar.password:
+    description: "Sonar password"
+    default: ""
