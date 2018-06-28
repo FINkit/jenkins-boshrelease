@@ -1,7 +1,27 @@
+ansible/ansible-2.2.3.0.tar.gz:
+  size: 2512540
+  object_id: 3b5520e8-66ac-4037-7d9f-54cf01d3e98f
+  sha: 683f85ad478786677b95a0684538db458d0f7bfb
 ansible/ansible-v2.5.2.tar.gz:
   size: 10192927
   object_id: a449d0df-70e7-4843-4bb5-00396cb58357
   sha: 959523a9b1db5a34cb3c3f6d37137f5b8895a55d
+ansible/jinja-2.9.6.tar.gz:
+  size: 487185
+  object_id: 3b7d51bd-b42b-4251-42cb-0db829a0559f
+  sha: 22872d7b0d92e118bb11f25e59f413532a83f3ec
+ansible/paramiko-2.2.1.tar.gz:
+  size: 267771
+  object_id: 1720ac0b-043a-4c75-5f89-1ac6c9b79570
+  sha: 48b3d638e07aeb2d0b6e3ec6c3fbd38af3fd787f
+ansible/pycrypto-2.6.1.tar.gz:
+  size: 446240
+  object_id: acfa561d-c299-4bd2-434a-afa13d21d095
+  sha: aeda3ed41caf1766409d4efc689b9ca30ad6aeb2
+bzip2/bzip2-1.0.6.tar.gz:
+  size: 782025
+  object_id: e04b8b52-405f-4335-4e43-61fd36e66544
+  sha: 3f89f861209ce81a6bab1fd1998c0ef311712002
 cf-cli/cf-6.46.1.tgz:
   size: 5910456
   object_id: 4e1d0b05-5da2-41fd-4df8-f3c059c98240
@@ -38,10 +58,34 @@ jenkins/swarm-client-3.6.jar:
   size: 1620623
   object_id: 7960ab0b-6580-41ce-5139-43ebd3b390fa
   sha: e9ee5866393ccae0d4b5500ce5521e2850c98cf7
+libffi/libffi-3.2.1.tar.gz:
+  size: 940837
+  object_id: 6537c16f-5d43-42ea-4562-3fa4bbe7aa06
+  sha: 280c265b789e041c02e5c97815793dfc283fb1e6
+libyaml/yaml-0.1.7.tar.gz:
+  size: 527518
+  object_id: 7be15047-e2fb-4783-5a83-0c694ee29457
+  sha: 3590cbf092ef4c71bc0a9b404c00a626b1e04dee
+openssl/openssl-1.0.2l.tar.gz:
+  size: 5365054
+  object_id: 296d7490-d49c-48fe-512b-05f74fd08935
+  sha: b58d5d0e9cea20e571d903aafa853e2ccd914138
 oraclejava/jdk-8u161-linux-x64.tar.gz:
   size: 189756259
   object_id: eb100739-7d1c-48ff-5687-ee2ad4f0209f
   sha: 9662b358ec90ecdc2c06acc2e326fbf25eaf567d
+pip/pip-9.0.1.tar.gz:
+  size: 6109437
+  object_id: e00b15d5-f060-4006-538a-70a55853534a
+  sha: 39b5840f6a9e6888d56a78beb447a064aeaf1592
+python/Python-2.7.13.tar.xz:
+  size: 12495628
+  object_id: b35020c1-6009-43aa-42b1-e813813e7284
+  sha: 18a8f30a0356c751b8d0ea6f76e764cab13ee046
+setuptools/setuptools-36.0.1.tar.gz:
+  size: 659748
+  object_id: 56f73541-1cf3-4170-7d26-63174bc92e0c
+  sha: c8b9d7019eafc6e7b296052b6ee1ca6b0c14d764
 swarm-client/swarm-client-2.2-jar-with-dependencies.jar:
   size: 1385476
   object_id: 0955da33-cdff-4169-7914-fa46bfb086a9
@@ -50,3 +94,7 @@ terraform/terraform_0.11.7_linux_amd64.zip:
   size: 16490308
   object_id: cff2eaff-828c-48ae-675d-103506b0ac97
   sha: 5b2e6b61692c538afd9103741cd5092ef50d6723
+zlib/zlib-1.2.11.tar.gz:
+  size: 607698
+  object_id: 6c14e420-bb44-45d0-4d83-8ee60eae9b34
+  sha: e6d119755acdf9104d7ba236b1242696940ed6dd
