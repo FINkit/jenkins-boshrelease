@@ -1,0 +1,31 @@
+import org.yaml.snakeyaml.*
+
+DumperOptions options = new DumperOptions()
+options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+Yaml yaml = new Yaml(options)
+
+def vcap_ssh_dir = "/home/vcap/.ssh"
+def ssh_keys = yaml.load('''<%= p('jenkins.slave.ssh_keys') %>''')
+ssh_keys.each { key ->
+  if (!key.id.equals("example-id")) {
+    println "Adding ${key.id} ssh key to ${vcap_ssh_dir}"
+  
+    File publicFile = new File("${vcap_ssh_dir}/${key.id}.pub")
+    publicFile.write "${key.public}"
+  
+    proc = "chmod 0644 ${vcap_ssh_dir}/${key.id}.pub".execute()
+    proc.waitFor()
+  
+    proc = "chown vcap:vcap ${vcap_ssh_dir}/${key.id}.pub".execute()
+    proc.waitFor()
+  
+    File privateFile = new File("${vcap_ssh_dir}/${key.id}.private")
+    privateFile.write "${key.private}"
+  
+    proc = "chmod 0600 ${vcap_ssh_dir}/${key.id}.private".execute()
+    proc.waitFor()
+  
+    proc = "chown vcap:vcap ${vcap_ssh_dir}/${key.id}.private".execute()
+    proc.waitFor()
+  }
+}

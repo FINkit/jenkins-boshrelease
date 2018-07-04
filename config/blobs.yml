@@ -42,6 +42,10 @@ groovy/apache-groovy-binary-2.4.13.zip:
   size: 36587726
   object_id: 533334f0-f6e8-4959-6ce5-90687aa938c0
   sha: d14bba275221389cbc4726a8c8c14f5a0f9e891d
+groovy/snakeyaml-1.18.jar:
+  size: 284338
+  object_id: 2b5090d2-08fb-4cab-624a-0d865fdd0f1d
+  sha: e4a441249ade301985cb8d009d4e4a72b85bf68e
 jenkins/apache-maven-3.5.2-bin.tar.gz:
   size: 8738691
   object_id: 2e476708-9b9f-4973-6f39-ee38965cd9ee
