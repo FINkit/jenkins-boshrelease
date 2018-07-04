@@ -16,6 +16,7 @@ chown vcap:vcap /home/vcap/.gitconfig
 mkdir -p /home/vcap/.ssh
 if [[ -d /home/vcap/.ssh ]]; then
   mv /var/vcap/jobs/jenkins-slave/config/id_rsa /home/vcap/.ssh/
+  chmod 0600 /home/vcap/.ssh/id_rsa
   chown -R vcap:vcap /home/vcap/.ssh
 fi
 
