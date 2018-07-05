@@ -21,3 +21,9 @@ if [[ -d /home/vcap/.ssh ]]; then
 fi
 
 chown -R vcap:vcap /var/vcap/data/jenkins-slave
+
+# Copy public and private ssh keys for protegrity slave
+export JAVA_HOME="/var/vcap/packages/oraclejdk"
+export GROOVY_HOME="/var/vcap/packages/groovy"
+export GROOVY="${GROOVY_HOME}/bin/groovy"
+${GROOVY} /var/vcap/jobs/jenkins-slave/bin/copy_protegrity_ssh_keys.groovy

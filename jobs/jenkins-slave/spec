@@ -11,6 +11,7 @@ packages:
 - gcloud
 - terraform
 - golang
+- groovy
 
 consumes:
 - name: jenkins_master
@@ -23,6 +24,7 @@ templates:
   bin/jenkins-slave_ctl: bin/jenkins-slave_ctl
   bin/pre-start: bin/pre-start
   bin/monit_debugger: bin/monit_debugger
+  bin/copy_protegrity_ssh_keys.groovy.erb: bin/copy_protegrity_ssh_keys.groovy
   data/properties.sh.erb: data/properties.sh
   config/.gitconfig.erb: config/.gitconfig
   config/settings.xml.erb: config/settings.xml
@@ -56,3 +58,10 @@ properties:
   jenkins.slave.type:
     description: "The type of the slave"
     default: "localhost"
+  jenkins.slave.ssh_keys:
+    description: "List of ssh keys to be added to the Jenkins slave"
+    default: |
+      - id: example-id
+        description: "Example key"
+        public: public-key
+        private: private-key

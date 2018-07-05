@@ -8,3 +8,5 @@ echo "Extracting archive..."
 unzip ${archive}
 
 mv groovy-${GROOVY_VERSION}/* ${BOSH_INSTALL_TARGET}
+
+mv groovy/snakeyaml-1.18.jar ${BOSH_INSTALL_TARGET}/lib/
