@@ -20,6 +20,7 @@ if [[ $(ls /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy) ]]; then
     cp /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy /var/vcap/store/jenkins-master/init.groovy.d/
     # We want standard Jenkins managed access unless defined
     rm /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
+    rm /var/vcap/store/jenkins-master/init.groovy.d/configure-project-based-matrix-security.groovy
 fi
 
 if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
@@ -27,6 +28,8 @@ if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
         rm /var/vcap/store/jenkins-master/init.groovy.d/configure-access.groovy
     fi
     cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-github-access.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
+    cp /var/vcap/jobs/jenkins-master/init.groovy.d/configure-project-based-matrix-security.groovy /var/vcap/store/jenkins-master/init.groovy.d/configure-project-based-matrix-security.groovy
+    cp /var/vcap/jobs/jenkins-master/config/permissions.yml /var/vcap/store/jenkins-master/init.groovy.d/permissions.yml
 fi
 
 if [ ${JENKINS_USE_GITHUB_REPOS} == "true" ]; then
