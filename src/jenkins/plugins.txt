@@ -50,6 +50,7 @@ http_request:1.8.22
 icon-shim:2.0.3
 jackson2-api:2.8.11.1
 javadoc:1.4
+jdk-tool:1.0
 jobConfigHistory:2.18
 job-restrictions:0.6
 jquery:1.12.4-0
