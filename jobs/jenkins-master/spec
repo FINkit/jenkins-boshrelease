@@ -30,6 +30,7 @@ templates:
   config/configure-sonar.groovy.erb: init.groovy.d/configure-sonar.groovy
   config/configure-slack.groovy.erb: init.groovy.d/configure-slack.groovy
   config/configure-whitesource.groovy.erb: init.groovy.d/configure-whitesource.groovy
+  config/configure-project-based-matrix-security.groovy: init.groovy.d/configure-project-based-matrix-security.groovy
   config/envInject.xml.erb: config/envInject.xml
   config/envinject-plugin-configuration.xml.erb: config/envinject-plugin-configuration.xml
   config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml.erb: config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml
@@ -37,6 +38,7 @@ templates:
   config/jenkins.model.JenkinsLocationConfiguration.xml.erb: config/jenkins.model.JenkinsLocationConfiguration.xml
   config/jenkins_logo.png: config/jenkins_logo.png
   config/org.codefirst.SimpleThemeDecorator.xml.erb: config/org.codefirst.SimpleThemeDecorator.xml
+  config/permissions.yml.erb: config/permissions.yml
   config/scriptApproval.xml.erb: config/scriptApproval.xml
   config/sonar.xml.erb: config/sonar.xml
   config/tcp-slave-agent-port.groovy.erb: init.groovy.d/tcp-slave-agent-port.groovy
@@ -130,6 +132,9 @@ properties:
   jenkins.github.oauth.anon.job.status:
     description: "Grant ViewStatus permissions for Anonymous Users"
     default: false
+  jenkins.permissions:
+    description: "YAML formatted list of permissions for the groups and users in all organisations"
+    default: ""
   jenkins.slack.base_url:
     description: "Slack Base URL"
     default: ""
