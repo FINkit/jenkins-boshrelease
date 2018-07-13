@@ -7,7 +7,11 @@ set -u # report the usage of uninitialized variables
 source /var/vcap/jobs/jenkins-slave/helpers/ctl_setup.sh 'jenkins-slave'
 
 # Load docker environment variables
-exec /var/vcap/jobs/docker/bin/envrc
+export PATH=$PATH:/var/vcap/packages/docker/bin
+export PATH=$PATH:/var/vcap/packages/ctop/bin
+export DOCKER_SOCK=/var/vcap/sys/run/docker/docker.sock
+export DOCKER_HOST=unix://$DOCKER_SOCK
+alias docker="/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_SOCK}"
 
 export PORT=${PORT:-5000}
 export LANG=en_US.UTF-8
