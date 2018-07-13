@@ -90,6 +90,13 @@ do
   export CLASSPATH=${java_jar}:$CLASSPATH
 done
 
+# Load docker environment variables
+export PATH=$PATH:/var/vcap/packages/docker/bin
+export PATH=$PATH:/var/vcap/packages/ctop/bin
+export DOCKER_SOCK=/var/vcap/sys/run/docker/docker.sock
+export DOCKER_HOST=unix://$DOCKER_SOCK
+alias docker="/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_SOCK}"
+
 PIDFILE=$RUN_DIR/$output_label.pid
 
 echo '$PATH' $PATH
