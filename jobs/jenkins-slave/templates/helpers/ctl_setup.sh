@@ -97,6 +97,11 @@ export DOCKER_SOCK=/var/vcap/sys/run/docker/docker.sock
 export DOCKER_HOST=unix://$DOCKER_SOCK
 alias docker="/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_SOCK}"
 
+# Load Apache Maven environment variables
+export M2_HOME=/var/vcap/packages/apache-maven
+export M2=${M2_HOME}/bin
+export PATH=${M2}:${PATH}
+
 PIDFILE=$RUN_DIR/$output_label.pid
 
 echo '$PATH' $PATH
