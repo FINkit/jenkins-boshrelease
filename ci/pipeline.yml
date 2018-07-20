@@ -112,7 +112,7 @@ resources:
   source:
     driver: gcs
     bucket: ((buildtools-release-tarballs.bucket))
-    json_key: ((concourse_project_google_key))
+    json_key: ((prod-build-storage-google-key))
     initial_version: 0.0.0
     key: jenkins.version
 
