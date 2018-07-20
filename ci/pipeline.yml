@@ -168,10 +168,6 @@ jobs:
       - create-dev-release
       trigger: true
     - get: warden-stemcell
-  - task: create-jenkins-bosh-config
-    file: jenkins-boshrelease/ci/tasks/create-bosh-config.yml
-    params:
-      BOSH_DEPLOYMENT: &deployment-name jenkins
   - task: bbl-up
     file: cf-deployment-concourse-tasks/bbl-up/task.yml
     input_mapping:
@@ -191,6 +187,10 @@ jobs:
       params:
         repository: updated-bbl-state
         rebase: true
+  - task: create-jenkins-bosh-config
+    file: jenkins-boshrelease/ci/tasks/create-bosh-config.yml
+    params:
+      BOSH_DEPLOYMENT: &deployment-name jenkins
   - put: bosh-deployment # Deploy Jenkins instance
     params:
       source_file: source/source.yml
