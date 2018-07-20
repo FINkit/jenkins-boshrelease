@@ -159,7 +159,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: jenkins-boshrelease
       passed:
-      - set-pipeline
+      - create-dev-release
     - get: devtools-tests
     - get: jenkins-boshrelease-tarball
       passed:
