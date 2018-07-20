@@ -66,14 +66,14 @@ resources:
 - name: jenkins-boshrelease-tarball
   type: google-cloud-storage
   source:
-    bucket: ((dev-build-automate-release-tarballs.bucket))
-    json_key: ((concourse_project_google_key))
+    bucket: ((buildtools-release-tarballs.bucket))
+    json_key: ((prod-build-storage-google-key))
     versioned_file: jenkins-boshrelease/dev-release.tgz
 - name: final-jenkins-boshrelease-tarball
   type: google-cloud-storage
   source:
-    bucket: ((dev-build-automate-release-tarballs.bucket))
-    json_key: ((concourse_project_google_key))
+    bucket: ((buildtools-release-tarballs.bucket))
+    json_key: ((prod-build-storage-google-key))
     regexp: jenkins-boshrelease/jenkins-boshrelease-v(.*).tgz
 - name: warden-stemcell
   type: bosh-io-stemcell
@@ -111,7 +111,7 @@ resources:
   type: semver
   source:
     driver: gcs
-    bucket: ((dev-build-automate-release-tarballs.bucket))
+    bucket: ((buildtools-release-tarballs.bucket))
     json_key: ((concourse_project_google_key))
     initial_version: 0.0.0
     key: jenkins.version
