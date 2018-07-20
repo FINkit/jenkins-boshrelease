@@ -116,21 +116,6 @@ resources:
     initial_version: 0.0.0
     key: jenkins.version
 
-groups:
-- name: create
-  jobs:
-  - set-pipeline
-  - setup-infrastructure
-  - create-dev-release
-  - test-jenkins
-  - prerelease-patch
-  - prerelease-minor
-  - prerelease-major
-  - release-final
-- name: destroy
-  jobs:
-  - destroy-bosh
-
 jobs:
 - name: set-pipeline
   plan:
@@ -158,8 +143,6 @@ jobs:
   plan:
   - aggregate:
     - get: jenkins-boshrelease
-      passed:
-      - set-pipeline
       trigger: true
   - task: create-release
     file: jenkins-boshrelease/ci/tasks/create-dev-release.yml
@@ -167,18 +150,25 @@ jobs:
     params: { file: jenkins-boshrelease-tarball/dev-release.tgz }
   <<: *slack-alert
 
-- name: setup-infrastructure
-  serial_groups:
-  - bbl
+- name: test-jenkins
   plan:
   - aggregate:
     - get: bbl-state
-    - get: cf-deployment-concourse-tasks
     - get: concourse-tasks
+    - get: cf-deployment-concourse-tasks
     - get: jenkins-boshrelease
       passed:
       - set-pipeline
+    - get: devtools-tests
+    - get: jenkins-boshrelease-tarball
+      passed:
+      - create-dev-release
       trigger: true
+    - get: warden-stemcell
+  - task: create-jenkins-bosh-config
+    file: jenkins-boshrelease/ci/tasks/create-bosh-config.yml
+    params:
+      BOSH_DEPLOYMENT: &deployment-name jenkins
   - task: bbl-up
     file: cf-deployment-concourse-tasks/bbl-up/task.yml
     input_mapping:
@@ -198,70 +188,35 @@ jobs:
       params:
         repository: updated-bbl-state
         rebase: true
-  <<: *slack-alert
-
-- name: test-jenkins
-  plan:
-  - aggregate:
-    - get: bbl-state
-      passed:
-      - setup-infrastructure
-    - get: concourse-tasks
-    - get: cf-deployment-concourse-tasks
-    - get: jenkins-boshrelease
-      passed:
-      - create-dev-release
-      - setup-infrastructure
-    - get: devtools-tests
-    - get: jenkins-boshrelease-tarball
-      passed:
-      - create-dev-release
-      trigger: true
-    - get: warden-stemcell
-  - aggregate:
-    - do:
-      - task: create-jenkins-bosh-config
-        file: jenkins-boshrelease/ci/tasks/create-bosh-config.yml
-        params:
-          BOSH_DEPLOYMENT: &deployment-name jenkins
-      - put: bosh-deployment # Deploy Jenkins instance
-        params:
-          source_file: source/source.yml
-          manifest: jenkins-boshrelease/jenkins.yml
-          releases:
-          - jenkins-boshrelease-tarball/dev-release.tgz
-          stemcells:
-          - warden-stemcell/stemcell.tgz
-          vars:
-            deployment_name: *deployment-name
-      - task: test-jenkins
-        file: concourse-tasks/tasks/run-devtools-tests/task.yml
-        params:
-          BOSH_DEPLOYMENT: *deployment-name
-          BOSH_LITE: true
-          INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
-          JENKINS_AUTH_METHOD: "local"
-          JENKINS_HOST: "http://localhost:8080"
-          JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
-          TEST_TAGS: "@unit && @jenkins"
-        on_success:
-          put: bosh-deployment # Destroy Jenkins instance
-          params:
-            source_file: source/source.yml
-            delete:
-              enabled: true
-              force: true
-            vars:
-              deployment_name: *deployment-name
-  <<: *slack-alert
-
-- name: destroy-bosh
-  serial_groups:
-  - bbl
-  plan:
-  - aggregate:
-    - get: bbl-state
-    - get: cf-deployment-concourse-tasks
+  - put: bosh-deployment # Deploy Jenkins instance
+    params:
+      source_file: source/source.yml
+      manifest: jenkins-boshrelease/jenkins.yml
+      releases:
+      - jenkins-boshrelease-tarball/dev-release.tgz
+      stemcells:
+      - warden-stemcell/stemcell.tgz
+      vars:
+        deployment_name: *deployment-name
+  - task: test-jenkins
+    file: concourse-tasks/tasks/run-devtools-tests/task.yml
+    params:
+      BOSH_DEPLOYMENT: *deployment-name
+      BOSH_LITE: true
+      INSTALLED_PLUGINS_FILE_PATH_SUFFIX: "/jenkins-boshrelease/src/jenkins/plugins.txt"
+      JENKINS_AUTH_METHOD: "local"
+      JENKINS_HOST: "http://localhost:8080"
+      JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
+      TEST_TAGS: "@unit && @jenkins"
+    on_success:
+      put: bosh-deployment # Destroy Jenkins instance
+      params:
+        source_file: source/source.yml
+        delete:
+          enabled: true
+          force: true
+        vars:
+          deployment_name: *deployment-name
   - task: bbl-destroy
     file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
     input_mapping:
