@@ -152,6 +152,8 @@ jobs:
   <<: *slack-alert
 
 - name: test-jenkins
+  build_logs_to_retain: 20
+  serial: true
   plan:
   - aggregate:
     - get: bbl-state
