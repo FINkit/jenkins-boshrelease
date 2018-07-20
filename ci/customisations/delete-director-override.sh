@@ -1,4 +1,3 @@
-
 #!/bin/sh
 bosh delete-env \
   ${BBL_STATE_DIR}/bosh-deployment/bosh.yml \
