@@ -144,6 +144,7 @@ jobs:
   - aggregate:
     - get: jenkins-boshrelease
       trigger: true
+      passed: [set-pipeline]
   - task: create-release
     file: jenkins-boshrelease/ci/tasks/create-dev-release.yml
   - put: jenkins-boshrelease-tarball
