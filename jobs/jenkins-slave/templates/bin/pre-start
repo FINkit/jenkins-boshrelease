@@ -23,8 +23,10 @@ fi
 if [[ ! -h /home/vcap/.m2 ]]; then
   mkdir -p /var/vcap/data/jenkins-slave/.m2
   if [[ -d /var/vcap/data/jenkins-slave/.m2 ]]; then
-    mv /home/vcap/.m2/* /var/vcap/data/jenkins-slave/.m2/
-    rm -rf /home/vcap/.m2
+    if [[ -d /home/vcap/.m2 ]]; then
+      mv /home/vcap/.m2/* /var/vcap/data/jenkins-slave/.m2/
+      rm -rf /home/vcap/.m2
+    fi
     ln -s /var/vcap/data/jenkins-slave/.m2 /home/vcap/.m2
   fi
 fi
