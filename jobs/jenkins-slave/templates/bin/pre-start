@@ -20,6 +20,15 @@ if [[ -d /home/vcap/.ssh ]]; then
   chown -R vcap:vcap /home/vcap/.ssh
 fi
 
+if [[ ! -h /home/vcap/.m2 ]]; then
+  mkdir -p /var/vcap/data/jenkins-slave/.m2
+  if [[ -d /var/vcap/data/jenkins-slave/.m2 ]]; then
+    mv /home/vcap/.m2/* /var/vcap/data/jenkins-slave/.m2/
+    rm -rf /home/vcap/.m2
+    ln -s /var/vcap/data/jenkins-slave/.m2 /home/vcap/.m2
+  fi
+fi
+
 chown -R vcap:vcap /var/vcap/data/jenkins-slave
 
 # Copy public and private ssh keys for protegrity slave
