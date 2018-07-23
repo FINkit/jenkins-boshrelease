@@ -1,65 +1,51 @@
 azs:
 - name: z1
+  cloud_properties:
+    zone: ((zone))
 - name: z2
+  cloud_properties:
+    zone: ((zone))
 - name: z3
-compilation:
-  az: z1
-  network: default
-  reuse_compilation_vms: true
-  vm_type: minimal
-  workers: 6
+  cloud_properties:
+    zone: ((zone))
+
+vm_types:
+- name: default
+  cloud_properties:
+    machine_type: n1-standard-2
+    root_disk_size_gb: 20
+    root_disk_type: pd-ssd
+- name: large
+  cloud_properties:
+    machine_type: n1-standard-2
+    root_disk_size_gb: 50
+    root_disk_type: pd-ssd
+
 disk_types:
-- disk_size: 1024
-  name: 1GB
-- disk_size: 5120
-  name: 5GB
-- disk_size: 10240
-  name: 10GB
-- disk_size: 100240
-  name: 100GB
+- name: default
+  disk_size: 3000
+- name: large
+  disk_size: 50_000
+
 networks:
 - name: default
+  type: manual
   subnets:
-  - azs: [z1, z2, z3]
+  - range: ((internal_cidr))
+    gateway: ((internal_gw))
+    azs: [z1, z2, z3]
+    dns: [8.8.8.8]
     cloud_properties:
-      name: random
-    gateway: 10.244.0.1
-    range: 10.244.0.0/20
-    reserved:
-    - 10.244.0.1
-    static:
-    - 10.244.0.2 - 10.244.0.127
-    - 10.244.1.0 - 10.244.1.127
-    - 10.244.2.0 - 10.244.2.127
-    - 10.244.3.0 - 10.244.3.127
-vm_extensions:
-- name: 5GB_ephemeral_disk
-- name: 10GB_ephemeral_disk
-- name: 50GB_ephemeral_disk
-- name: 100GB_ephemeral_disk
-- name: 500GB_ephemeral_disk
-- name: 1TB_ephemeral_disk
-- name: ssh-proxy-and-router-lb
-  cloud_properties:
-    ports:
-    - host: 80
-    - host: 443
-    - host: 2222
-- name: cf-tcp-router-network-properties
-  cloud_properties:
-    ports:
-    - host: 1024-1123
-- name: credhub-lb
-  cloud_properties:
-    ports:
-    - host: 8845
-- name: jenkins-pool
-  cloud_properties:
-    backend_service: dev-build-create-router-lb
-    tags:
-    - dev-build-create-router-lb
-vm_types:
-- name: minimal
-- name: small
-- name: small-highmem
-- name: default
+      network_name: ((network))
+      subnetwork_name: ((subnetwork))
+      ephemeral_external_ip: true
+      tags: ((tags))
+- name: vip
+  type: vip
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: default
+  network: default
