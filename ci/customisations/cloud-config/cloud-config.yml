@@ -1,13 +1,13 @@
 azs:
 - name: z1
   cloud_properties:
-    zone: ((zone))
+    zone: europe-west2-a
 - name: z2
   cloud_properties:
-    zone: ((zone))
+    zone: europe-west2-b
 - name: z3
   cloud_properties:
-    zone: ((zone))
+    zone: europe-west2-c
 
 vm_types:
 - name: default
