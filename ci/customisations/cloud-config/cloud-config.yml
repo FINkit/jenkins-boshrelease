@@ -21,12 +21,6 @@ vm_types:
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
 
-disk_types:
-- name: default
-  disk_size: 3000
-- name: large
-  disk_size: 50_000
-
 networks:
 - name: default
   type: manual
@@ -40,8 +34,7 @@ networks:
       subnetwork_name: ((subnetwork))
       ephemeral_external_ip: false
       tags: [internal, no-ip]
-- name: vip
-  type: vip
+      preemptible: true
 
 compilation:
   workers: 5
@@ -49,3 +42,11 @@ compilation:
   az: z1
   vm_type: compile
   network: default
+  vm_extensions:
+  - 50GB_ephemeral_disk
+
+vm_extensions:
+  - cloud_properties:
+    root_disk_size_gb: 50
+    root_disk_type: pd-ssd
+  name: 50GB_ephemeral_disk
