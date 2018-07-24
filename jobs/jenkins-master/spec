@@ -34,6 +34,7 @@ templates:
   config/envInject.xml.erb: config/envInject.xml
   config/envinject-plugin-configuration.xml.erb: config/envinject-plugin-configuration.xml
   config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml.erb: config/hudson.plugins.build_timeout.operations.BuildStepOperation.xml
+  config/hudson.plugins.throttleconcurrents.ThrottleJobProperty.xml.erb: config/hudson.plugins.throttleconcurrents.ThrottleJobProperty.xml
   config/hudson.plugins.timestamper.TimestamperConfig.xml.erb: config/hudson.plugins.timestamper.TimestamperConfig.xml
   config/jenkins.model.JenkinsLocationConfiguration.xml.erb: config/jenkins.model.JenkinsLocationConfiguration.xml
   config/jenkins_logo.png: config/jenkins_logo.png
@@ -144,6 +145,15 @@ properties:
   jenkins.slack.channel:
     description: "Slack channel"
     default: ""
+  jenkins.throttling.catagories:
+    description: "Default catagories for throttling pipeline builds"
+    default: |
+      <hudson.plugins.throttleconcurrents.ThrottleJobProperty_-ThrottleCategory>
+        <maxConcurrentPerNode>2</maxConcurrentPerNode>
+        <maxConcurrentTotal>0</maxConcurrentTotal>
+        <categoryName>pipeline</categoryName>
+        <nodeLabeledPairs/>
+      </hudson.plugins.throttleconcurrents.ThrottleJobProperty_-ThrottleCategory>
   jenkins.whitesource.job_api_token:
     description: "Whitesource Job API token"
     default: ""
