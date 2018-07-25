@@ -25,6 +25,7 @@ templates:
   bin/pre-start: bin/pre-start
   bin/monit_debugger: bin/monit_debugger
   bin/copy_protegrity_ssh_keys.groovy.erb: bin/copy_protegrity_ssh_keys.groovy
+  bin/add_host_key_verification_list.groovy.erb: bin/add_host_key_verification_list.groovy
   data/properties.sh.erb: data/properties.sh
   config/.gitconfig.erb: config/.gitconfig
   config/settings.xml.erb: config/settings.xml
@@ -65,3 +66,14 @@ properties:
         description: "Example key"
         public: public-key
         private: private-key
+  jenkins.slave.host_verification_list:
+    description: "List of ssh hosts to automatically verify"
+    default: |
+      - id: an-example-host
+        host: an.example.host
+        hostname: an.example.host
+        strict_checking: 'no'
+      - id: another-example-host
+        host: another.example.host
+        hostname: another.example.host
+        strict_checking: 'no'

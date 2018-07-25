@@ -1,0 +1,22 @@
+import org.yaml.snakeyaml.*
+
+DumperOptions options = new DumperOptions()
+options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+Yaml yaml = new Yaml(options)
+
+def vcap_ssh_config = "/home/vcap/.ssh/config"
+def hosts_list = yaml.load('''<%= p('jenkins.slave.host_verification_list') %>''')
+File configFile = new File("${vcap_ssh_config}")
+hosts_list.each { host ->
+  if (!configFile.exists() || !(configFile.exists() && configFile.text.contains("${host.host}"))) {
+    println "Adding ${host.id} to ${vcap_ssh_config}"
+    configFile.append "Host ${host.host}\n"
+    configFile.append "    Hostname ${host.hostname}\n"
+    configFile.append "    StrictHostKeyChecking ${host.strict_checking.toString()}\n"
+  }
+}
+proc = "chmod 0600 ${vcap_ssh_config}".execute()
+proc.waitFor()
+
+proc = "chown vcap:vcap ${vcap_ssh_config}".execute()
+proc.waitFor()
