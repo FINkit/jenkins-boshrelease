@@ -4,21 +4,28 @@ DumperOptions options = new DumperOptions()
 options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
 Yaml yaml = new Yaml(options)
 
-def vcap_ssh_known_hosts = "/home/vcap/.ssh/known_hosts"
-def known_hosts_list = yaml.load('''<%= p('jenkins.slave.known_hosts_list') %>''')
-File knownHostsFile = new File("${vcap_ssh_known_hosts}")
-known_hosts_list.each { known_host ->
-  println "Adding ${known_host.host} to ${vcap_ssh_known_hosts}"
-  def sout = new StringBuilder(), serr = new StringBuilder()
-  knownHostEntry = "ssh-keyscan -H ${known_host.host}".execute()
-  knownHostEntry.consumeProcessOutput(sout, serr)
-  knownHostEntry.waitForOrKill(1000)
-  if (!knownHostsFile.exists() || !(knownHostsFile.exists() && knownHostsFile.text.contains(sout))) {
-    knownHostsFile.append "${sout}\n"
+def host_list = '''<%= p('jenkins.slave.hosts') %>'''
+if (host_list) {
+  def hosts = yaml.load(host_list)
+  def vcap_ssh_known_hosts = "/home/vcap/.ssh/known_hosts"
+  File knownHostsFile = new File("${vcap_ssh_known_hosts}")
+  hosts.each { known_host ->
+    println "Adding ${known_host.host} to ${vcap_ssh_known_hosts}"
+    def sout = new StringBuilder(), serr = new StringBuilder()
+    knownHostEntry = "ssh-keyscan -H ${known_host.host}".execute()
+    knownHostEntry.consumeProcessOutput(sout, serr)
+    knownHostEntry.waitForOrKill(1000)
+    if (sout) {
+      if (!knownHostsFile.exists() || !(knownHostsFile.exists() && knownHostsFile.text.contains(sout))) {
+        knownHostsFile.append "${sout}\n"
+      }
+    }
+  }
+  if (knownHostsFile.exists()) {
+    proc = "chmod 0600 ${vcap_ssh_known_hosts}".execute()
+    proc.waitFor()
+
+    proc = "chown vcap:vcap ${vcap_ssh_known_hosts}".execute()
+    proc.waitFor()
   }
 }
-proc = "chmod 0600 ${vcap_ssh_known_hosts}".execute()
-proc.waitFor()
-
-proc = "chown vcap:vcap ${vcap_ssh_known_hosts}".execute()
-proc.waitFor()

@@ -66,8 +66,7 @@ properties:
         description: "Example key"
         public: public-key
         private: private-key
-  jenkins.slave.known_hosts_list:
+  jenkins.slave.hosts:
     description: "List of ssh hosts to automatically add to the known_hosts file"
     default: |
-      - host: github-dev.finkit.io
-      - host: github.finkit.io
+      - host: an.example.host
