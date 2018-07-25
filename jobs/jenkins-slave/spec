@@ -25,6 +25,7 @@ templates:
   bin/pre-start: bin/pre-start
   bin/monit_debugger: bin/monit_debugger
   bin/copy_protegrity_ssh_keys.groovy.erb: bin/copy_protegrity_ssh_keys.groovy
+  bin/add_known_host_entries.groovy.erb: bin/add_known_host_entries.groovy
   data/properties.sh.erb: data/properties.sh
   config/.gitconfig.erb: config/.gitconfig
   config/settings.xml.erb: config/settings.xml
@@ -65,3 +66,8 @@ properties:
         description: "Example key"
         public: public-key
         private: private-key
+  jenkins.slave.known_hosts_list:
+    description: "List of ssh hosts to automatically add to the known_hosts file"
+    default: |
+      - host: github-dev.finkit.io
+      - host: github.finkit.io
