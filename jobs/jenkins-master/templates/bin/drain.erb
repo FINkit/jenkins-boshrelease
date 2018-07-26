@@ -1,0 +1,68 @@
+#!/bin/bash
+
+set -eo pipefail
+
+exec 3>&1
+exec 1>> /var/vcap/sys/log/jenkins-master/drain.stdout.log
+exec 2>> /var/vcap/sys/log/jenkins-master/drain.stderr.log
+
+SLEEP_INTERVAL_IN_SECONDS=5
+TIMEOUT_IN_SECONDS=120
+SERVER=http://10.244.0.2:8080
+USERNAME=administrator
+TOKEN=7bc2e7c3eec901ac72e9cfb292ee17b3
+CRUMB_PATH='/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+BUILDS_PATH="/api/xml?&tree=jobs[builds[*]]&xpath=/hudson/job/build[building=%22true%22]&wrapper=builds"
+
+echo "$(date -Ins): Checking ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
+
+output_for_bosh() {
+  local _exit_code=$?
+
+  if [ ${_exit_code} -eq 0 ]; then
+    echo "$(date -Ins): drain succeeded"
+  else
+    echo "$(date -Ins): drain failed"
+  fi
+
+  poll_builds
+
+  echo ${_exit_code} >&3
+}
+
+poll_builds() {
+  local _builds=$(check_builds)
+
+  while [ "${_builds}" != "<builds/>" ]; do
+    echo Waiting on builds: ${_builds}
+    echo ${TIMEOUT_IN_SECONDS} seconds remaining
+    sleep ${SLEEP_INTERVAL_IN_SECONDS}
+    let TIMEOUT_IN_SECONDS=TIMEOUT_IN_SECONDS-SLEEP_INTERVAL_IN_SECONDS
+    _builds=$(check_builds)
+  done
+}
+
+check_builds() {
+  ${CURL_PREFIX}${BUILDS_PATH}
+}
+
+trap output_for_bosh EXIT
+
+# Check whether the process is running.
+pid_path=/var/vcap/sys/run/jenkins-master/jenkins-master.pid
+
+if [ ! -f "${pid_path}" ]; then echo 0; exit 0; fi
+
+pid=$(<"$pid_path")
+
+if ! ps -p "${pid}" >/dev/null; then echo 0; exit 0; fi
+
+# TODO Process is running, so send signal to instruct the process to gracefully shutdown Jenkins.
+echo "$(date -Ins): Draining ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
+
+CRUMB=$(curl --silent --user ${USERNAME}:${TOKEN} ${SERVER}${CRUMB_PATH})
+CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${TOKEN} --header \"${CRUMB}\" ${SERVER}"
+
+${CURL_PREFIX}/quietDown
+
+exit 0
