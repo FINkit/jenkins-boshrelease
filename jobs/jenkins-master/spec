@@ -12,6 +12,7 @@ provides:
 
 templates:
   bin/backup.sh.erb: bin/bbr/backup
+  bin/drain: bin/drain
   bin/jenkins-master_ctl: bin/jenkins-master_ctl
   bin/monit_debugger: bin/monit_debugger
   bin/post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
