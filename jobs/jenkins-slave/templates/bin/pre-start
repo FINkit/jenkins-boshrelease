@@ -38,3 +38,4 @@ export JAVA_HOME="/var/vcap/packages/oraclejdk"
 export GROOVY_HOME="/var/vcap/packages/groovy"
 export GROOVY="${GROOVY_HOME}/bin/groovy"
 ${GROOVY} /var/vcap/jobs/jenkins-slave/bin/copy_protegrity_ssh_keys.groovy
+${GROOVY} /var/vcap/jobs/jenkins-slave/bin/add_known_host_entries.groovy
