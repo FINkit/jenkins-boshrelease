@@ -7,7 +7,7 @@ USERNAME=administrator
 PASSWORD=<%= p('jenkins.admin.password') %>
 
 SLEEP_INTERVAL_IN_SECONDS=5
-TIMEOUT_IN_SECONDS=120
+TIMEOUT_IN_SECONDS=600
 CRUMB_PATH='/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
 BUILDS_PATH="/api/xml?&tree=jobs[builds[*]]&xpath=/hudson/job/build[building=%22true%22]&wrapper=builds"
 
@@ -33,10 +33,16 @@ poll_builds() {
   local _builds=$(check_builds)
 
   while [ "${_builds}" != "<builds/>" ]; do
-    echo Waiting on builds: ${_builds}
-    echo ${TIMEOUT_IN_SECONDS} seconds remaining
+    echo "$(date -Ins): Waiting on builds: ${_builds}"
+    echo "$(date -Ins): ${TIMEOUT_IN_SECONDS} seconds remaining"
     sleep ${SLEEP_INTERVAL_IN_SECONDS}
+    set +e
     let TIMEOUT_IN_SECONDS=TIMEOUT_IN_SECONDS-SLEEP_INTERVAL_IN_SECONDS
+    set -e
+    if [ ${TIMEOUT_IN_SECONDS} -eq 0 ]; then
+      echo "$(date -Ins): Timed out waiting for builds to complete"
+      exit 1
+    fi
     _builds=$(check_builds)
   done
 }
