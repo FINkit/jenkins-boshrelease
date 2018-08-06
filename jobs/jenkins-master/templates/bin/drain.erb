@@ -24,8 +24,6 @@ output_for_bosh() {
     echo "$(date -Ins): drain failed"
   fi
 
-  poll_builds
-
   echo ${_exit_code} >&3
 }
 
@@ -71,5 +69,7 @@ CRUMB=$(curl --silent --user ${USERNAME}:${PASSWORD} ${JENKINS_URL}${CRUMB_PATH}
 CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header \"${CRUMB}\" ${JENKINS_URL}"
 
 ${CURL_PREFIX}/quietDown
+
+poll_builds
 
 exit 0
