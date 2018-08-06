@@ -2,19 +2,18 @@
 
 set -eo pipefail
 
-exec 3>&1
-exec 1>> /var/vcap/sys/log/jenkins-master/drain.stdout.log
-exec 2>> /var/vcap/sys/log/jenkins-master/drain.stderr.log
+JENKINS_URL=<%= p('jenkins.server.address') %>
+USERNAME=administrator
+PASSWORD=<%= p('jenkins.admin.password') %>
 
 SLEEP_INTERVAL_IN_SECONDS=5
 TIMEOUT_IN_SECONDS=120
-SERVER=http://10.244.0.2:8080
-USERNAME=administrator
-TOKEN=7bc2e7c3eec901ac72e9cfb292ee17b3
 CRUMB_PATH='/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
 BUILDS_PATH="/api/xml?&tree=jobs[builds[*]]&xpath=/hudson/job/build[building=%22true%22]&wrapper=builds"
 
-echo "$(date -Ins): Checking ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
+exec 3>&1
+exec 1>> /var/vcap/sys/log/jenkins-master/drain.stdout.log
+exec 2>> /var/vcap/sys/log/jenkins-master/drain.stderr.log
 
 output_for_bosh() {
   local _exit_code=$?
@@ -55,13 +54,15 @@ if [ ! -f "${pid_path}" ]; then echo 0; exit 0; fi
 
 pid=$(<"$pid_path")
 
+echo "$(date -Ins): Checking ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
+
 if ! ps -p "${pid}" >/dev/null; then echo 0; exit 0; fi
 
 # TODO Process is running, so send signal to instruct the process to gracefully shutdown Jenkins.
 echo "$(date -Ins): Draining ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
 
-CRUMB=$(curl --silent --user ${USERNAME}:${TOKEN} ${SERVER}${CRUMB_PATH})
-CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${TOKEN} --header \"${CRUMB}\" ${SERVER}"
+CRUMB=$(curl --silent --user ${USERNAME}:${PASSWORD} ${JENKINS_URL}${CRUMB_PATH})
+CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header \"${CRUMB}\" ${JENKINS_URL}"
 
 ${CURL_PREFIX}/quietDown
 
