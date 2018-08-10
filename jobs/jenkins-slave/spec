@@ -16,6 +16,7 @@ packages:
 consumes:
 - name: jenkins_master
   type: jenkins
+  optional: true
 - name: nexus
   type: nexus
   optional: true
@@ -23,6 +24,8 @@ consumes:
 templates:
   bin/jenkins-slave_ctl: bin/jenkins-slave_ctl
   bin/pre-start: bin/pre-start
+  bin/common-functions: bin/common-functions
+  bin/drain.erb: bin/drain
   bin/monit_debugger: bin/monit_debugger
   bin/copy_protegrity_ssh_keys.groovy.erb: bin/copy_protegrity_ssh_keys.groovy
   bin/add_known_host_entries.groovy.erb: bin/add_known_host_entries.groovy
@@ -70,3 +73,6 @@ properties:
     description: "List of ssh hosts to automatically add to the known_hosts file"
     default: |
       - host: an.example.host
+  jenkins.node.id:
+    description: "Unique node id for slaves"
+    default: "placeholder"

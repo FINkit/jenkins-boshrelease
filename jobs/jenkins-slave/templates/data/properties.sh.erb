@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # job template binding variables
+<% if_link('jenkins_master') do |jenkins_master| %>
+JENKINS_URL=http://<%= link('jenkins_master').instances[0].address %>:<%= link('jenkins_master').p('jenkins.server.port') %>
 
 # job name & index of this VM within cluster
 # e.g. JOB_NAME=redis, JOB_INDEX=0
@@ -20,5 +22,6 @@ export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
 export SWARM_VERSION=2.2
 export SWARM_CLIENT=/var/vcap/packages/swarm-client/swarm-client-${SWARM_VERSION}-jar-with-dependencies.jar
 export SLAVE_DIR=/var/vcap/data/jenkins-slave
-export SWARM_ARGS="-deleteExistingClients -disableSslVerification -fsroot ${SLAVE_DIR} -showHostName -executors <%= p('jenkins.slave.executors') %> -labels \"<%= p('jenkins.slave.labels') %>\" -master http://<%= link('jenkins_master').instances[0].address %>:8080 -mode <%= p('jenkins.slave.mode') %> -name <%= p('jenkins.slave.type') %>"
+export SWARM_ARGS="-deleteExistingClients -disableSslVerification -fsroot ${SLAVE_DIR} -showHostName -executors <%= p('jenkins.slave.executors') %> -labels \"<%= p('jenkins.slave.labels') %>\" -master ${JENKINS_URL} -mode <%= p('jenkins.slave.mode') %> -name <%= p('jenkins.slave.type') %>-<%= p('jenkins.node.id') %>"
 export MEMORY_SETTINGS=""
+<% end %>
