@@ -12,7 +12,7 @@ provides:
 
 templates:
   bin/backup.sh.erb: bin/bbr/backup
-  bin/drain: bin/drain
+  bin/drain.erb: bin/drain
   bin/jenkins-master_ctl: bin/jenkins-master_ctl
   bin/monit_debugger: bin/monit_debugger
   bin/post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
@@ -176,3 +176,6 @@ properties:
   sonar.jenkins.password:
     description: "Sonar password for Jenkins user"
     default: ""
+  toggle.jenkins.drain:
+    description: "Toggle drain feature"
+    default: false
