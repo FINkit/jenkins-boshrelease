@@ -22,6 +22,6 @@ export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
 export SWARM_VERSION=2.2
 export SWARM_CLIENT=/var/vcap/packages/swarm-client/swarm-client-${SWARM_VERSION}-jar-with-dependencies.jar
 export SLAVE_DIR=/var/vcap/data/jenkins-slave
-export SWARM_ARGS="-deleteExistingClients -disableSslVerification -fsroot ${SLAVE_DIR} -showHostName -executors <%= p('jenkins.slave.executors') %> -labels \"<%= p('jenkins.slave.labels') %>\" -master ${JENKINS_URL} -mode <%= p('jenkins.slave.mode') %> -name <%= p('jenkins.slave.type') %>-<%= p('jenkins.node.id') %>"
+export SWARM_ARGS="-deleteExistingClients -disableSslVerification -fsroot ${SLAVE_DIR} -showHostName -executors <%= p('jenkins.slave.executors') %> -labels \"<%= p('jenkins.slave.labels') %>\" -master ${JENKINS_URL} -mode <%= p('jenkins.slave.mode') %> -name <%= p('jenkins.slave.type') %>-<%= spec.id %>"
 export MEMORY_SETTINGS=""
 <% end %>

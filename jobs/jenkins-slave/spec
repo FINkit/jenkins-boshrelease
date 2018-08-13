@@ -73,9 +73,6 @@ properties:
     description: "List of ssh hosts to automatically add to the known_hosts file"
     default: |
       - host: an.example.host
-  jenkins.node.id:
-    description: "Unique node id for slaves"
-    default: "placeholder"
   toggle.jenkins.drain:
     description: "Toggle drain feature"
     default: false
