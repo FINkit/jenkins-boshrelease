@@ -1,5 +1,7 @@
 #!/bin/bash
 
+if [ "<%= p('toggle.jenkins.drain') %>" = "false" ]; then echo 0; exit 0; fi
+
 set -eo pipefail
 
 <% if_link('jenkins_master') do |jenkins_master| %>

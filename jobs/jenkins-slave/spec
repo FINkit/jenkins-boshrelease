@@ -76,3 +76,6 @@ properties:
   jenkins.node.id:
     description: "Unique node id for slaves"
     default: "placeholder"
+  toggle.jenkins.drain:
+    description: "Toggle drain feature"
+    default: false
