@@ -43,8 +43,6 @@ properties:
   jenkins.gitconfig.email:
     description: "Email used when commiting to a git repository"
     default: "jenkins@jenkinsci.local"
-  jenkins.server.address:
-    description: "Fully qualified address of Jenkins server"
   jenkins.admin.password:
     description: "Password for the admin user"
   jenkins.slave.executors:
