@@ -7,7 +7,7 @@ set -eo pipefail
 <% if_link('jenkins_master') do |jenkins_master| %>
 JENKINS_URL=http://<%= link('jenkins_master').instances[0].address %>:<%= link('jenkins_master').p('jenkins.server.port') %>
 USERNAME=administrator
-PASSWORD=<%= p('jenkins.admin.password') %>
+PASSWORD=<%= link('jenkins_master').p('jenkins.admin.password') %>
 
 JOB_NAME=jenkins-slave
 SLEEP_INTERVAL_IN_SECONDS=5
