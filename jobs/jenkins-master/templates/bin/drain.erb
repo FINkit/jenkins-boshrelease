@@ -2,25 +2,55 @@
 
 if [ "<%= p('toggle.jenkins.drain') %>" = "false" ]; then echo 0; exit 0; fi
 
+#!/bin/bash
+
 set -eo pipefail
+JENKINS_URL=http://<%= spec.ip %>:<%= p('jenkins.server.port') %>
+USERNAME=administrator
+PASSWORD=<%= p('jenkins.admin.password') %>
+
+SLEEP_INTERVAL_IN_SECONDS=5
+TIMEOUT_IN_SECONDS=600
+CRUMB_PATH='/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+BUILDS_PATH="/api/xml?&tree=jobs[builds[*]]&xpath=/hudson/job/build[building=%22true%22]&wrapper=builds"
 
 exec 3>&1
 exec 1>> /var/vcap/sys/log/jenkins-master/drain.stdout.log
 exec 2>> /var/vcap/sys/log/jenkins-master/drain.stderr.log
 
-echo "$(date -Ins): Checking ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
-
 output_for_bosh() {
-  exit_code=$?
+  local _exit_code=$?
 
-  if [ ${exit_code} -eq 0 ]; then
+  if [ ${_exit_code} -eq 0 ]; then
     echo "$(date -Ins): drain succeeded"
   else
     echo "$(date -Ins): drain failed"
   fi
+  # if failed will wait an arbitrary number of extra seconds (non zero _exit_code value)
+  # as per https://bosh.io/docs/drain/
+  echo ${_exit_code} >&3
+}
 
-  # Inform BOSH that it can continue after waiting 60 seconds.
-  echo 60 >&3
+poll_builds() {
+  local _builds=$(check_builds)
+
+  while [ "${_builds}" != "<builds/>" ]; do
+    echo "$(date -Ins): Waiting on builds: ${_builds}"
+    echo "$(date -Ins): ${TIMEOUT_IN_SECONDS} seconds remaining"
+    sleep ${SLEEP_INTERVAL_IN_SECONDS}
+    set +e
+    let TIMEOUT_IN_SECONDS=TIMEOUT_IN_SECONDS-SLEEP_INTERVAL_IN_SECONDS
+    set -e
+    if [ ${TIMEOUT_IN_SECONDS} -eq 0 ]; then
+      echo "$(date -Ins): Timed out waiting for builds to complete"
+      exit 1
+    fi
+    _builds=$(check_builds)
+  done
+}
+
+check_builds() {
+  ${CURL_PREFIX}${BUILDS_PATH}
 }
 
 trap output_for_bosh EXIT
@@ -32,9 +62,18 @@ if [ ! -f "${pid_path}" ]; then echo 0; exit 0; fi
 
 pid=$(<"$pid_path")
 
+echo "$(date -Ins): Checking ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
+
 if ! ps -p "${pid}" >/dev/null; then echo 0; exit 0; fi
 
-# TODO Process is running, so send signal to instruct the process to drain active connections and to steer traffic to the other instances of this job.
+# Process is running, so send signal to instruct the process to gracefully shutdown Jenkins.
 echo "$(date -Ins): Draining ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
+
+CRUMB=$(curl --silent --user ${USERNAME}:${PASSWORD} ${JENKINS_URL}${CRUMB_PATH})
+CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header ${CRUMB} ${JENKINS_URL}"
+
+${CURL_PREFIX}/quietDown --request POST
+
+poll_builds
 
 exit 0
