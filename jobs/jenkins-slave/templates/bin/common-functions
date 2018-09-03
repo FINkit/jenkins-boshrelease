@@ -1,0 +1,12 @@
+#!/bin/bash
+
+CURL_POST_PREFIX="curl --request POST --data \"\" --silent --user ${USERNAME}:${PASSWORD} --header ${CRUMB} ${JENKINS_URL}"
+
+toggle_node_offline() {
+  local _message=$1
+  local _node_name=$2
+
+  local _agent_path="/computer/${_node_name}/toggleOffline?offlineMessage="
+  echo "$(date -Ins): Toggling node offline status with message ${_message} on ${_node_name}"
+  ${CURL_POST_PREFIX}${_agent_path}${_message}
+}

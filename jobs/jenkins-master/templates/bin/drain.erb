@@ -1,8 +1,11 @@
 #!/bin/bash
 
-set -eo pipefail
+if [ "<%= p('toggle.jenkins.drain') %>" = "false" ]; then echo 0; exit 0; fi
 
-JENKINS_URL=<%= p('jenkins.server.address') %>
+#!/bin/bash
+
+set -eo pipefail
+JENKINS_URL=http://<%= spec.ip %>:<%= p('jenkins.server.port') %>
 USERNAME=administrator
 PASSWORD=<%= p('jenkins.admin.password') %>
 
@@ -23,7 +26,8 @@ output_for_bosh() {
   else
     echo "$(date -Ins): drain failed"
   fi
-
+  # if failed will wait an arbitrary number of extra seconds (non zero _exit_code value)
+  # as per https://bosh.io/docs/drain/
   echo ${_exit_code} >&3
 }
 
@@ -66,9 +70,9 @@ if ! ps -p "${pid}" >/dev/null; then echo 0; exit 0; fi
 echo "$(date -Ins): Draining ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
 
 CRUMB=$(curl --silent --user ${USERNAME}:${PASSWORD} ${JENKINS_URL}${CRUMB_PATH})
-CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header \"${CRUMB}\" ${JENKINS_URL}"
+CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header ${CRUMB} ${JENKINS_URL}"
 
-${CURL_PREFIX}/quietDown
+${CURL_PREFIX}/quietDown --request POST
 
 poll_builds
 

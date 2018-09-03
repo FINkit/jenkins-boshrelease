@@ -9,6 +9,9 @@ packages:
 provides:
 - name: jenkins_master
   type: jenkins
+  properties:
+  - jenkins.server.port
+  - jenkins.admin.password
 
 templates:
   bin/backup.sh.erb: bin/bbr/backup
@@ -74,9 +77,12 @@ properties:
   jenkins.smtp.ssl:
     description: "Boolean toggle for ssl"
     default: false
-  jenkins.server.address:
-    description: "Fully qualified address of Jenkins server"
+  jenkins.server.url:
+    description: "Jenkins server url"
     default: "http://127.0.0.1:8080"
+  jenkins.server.port:
+    description: "Port of the Jenkins server"
+    default: 8080
   jenkins.admin.email:
     description: "Email address to send all emails from"
   jenkins.admin.password:
@@ -176,3 +182,6 @@ properties:
   sonar.jenkins.password:
     description: "Sonar password for Jenkins user"
     default: ""
+  toggle.jenkins.drain:
+    description: "Toggle drain feature"
+    default: false
