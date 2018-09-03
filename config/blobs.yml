@@ -54,6 +54,10 @@ jenkins/jenkins_2.121.1.war:
   size: 74736772
   object_id: df5e516f-2af0-4bad-5532-8270dc77e16e
   sha: c01f29832c83715f0ca57086e1bc823585f41d97
+jenkins/jenkins_2.121.3.war:
+  size: 74764818
+  object_id: 62126f77-f8a7-4aba-78b4-203b9f1179e3
+  sha: d6287629b0328e9f323b6279b47ee42ab9d8e840
 jenkins/plugins-201807101741.zip:
   size: 219587315
   object_id: 8e8e3d5e-5e35-4379-72ad-745f2e2826e0
