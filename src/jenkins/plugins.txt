@@ -100,7 +100,7 @@ script-security:1.42
 sidebar-link:1.9.1
 simple-theme-plugin:0.4
 slack:2.3
-sonar:2.6.1
+sonar:2.8
 ssh-agent:1.15
 ssh-credentials:1.14
 structs:1.14
