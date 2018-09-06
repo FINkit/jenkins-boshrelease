@@ -60,6 +60,7 @@ junit:1.24
 ldap:1.20
 m2release:0.14.0
 mailer:1.21
+mail-watcher-plugin:1.16
 mask-passwords:2.11.0
 matrix-auth:2.2
 matrix-project:1.12
