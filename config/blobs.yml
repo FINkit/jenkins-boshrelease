@@ -50,14 +50,10 @@ jenkins/apache-maven-3.5.2-bin.tar.gz:
   size: 8738691
   object_id: 2e476708-9b9f-4973-6f39-ee38965cd9ee
   sha: 190dcebb8a080f983af4420cac4f3ece7a47dd64
-jenkins/jenkins_2.121.1.war:
-  size: 74736772
-  object_id: df5e516f-2af0-4bad-5532-8270dc77e16e
-  sha: c01f29832c83715f0ca57086e1bc823585f41d97
-jenkins/plugins-201807101741.zip:
-  size: 219587315
-  object_id: 8e8e3d5e-5e35-4379-72ad-745f2e2826e0
-  sha: 7987c77ddc449b5a4b48e5df640d7a10e5d9cd5f
+jenkins/jenkins_2.121.3.war:
+  size: 74764818
+  object_id: 62126f77-f8a7-4aba-78b4-203b9f1179e3
+  sha: d6287629b0328e9f323b6279b47ee42ab9d8e840
 jenkins/plugins-201808291436.zip:
   size: 216107572
   object_id: 1579998d-c8d1-449f-556d-dc88bf9f92b9
