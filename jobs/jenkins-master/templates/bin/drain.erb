@@ -6,8 +6,14 @@ if [ "<%= p('toggle.jenkins.drain') %>" = "false" ]; then echo 0; exit 0; fi
 
 set -eo pipefail
 JENKINS_URL=http://<%= spec.ip %>:<%= p('jenkins.server.port') %>
-USERNAME=administrator
-PASSWORD=<%= p('jenkins.admin.password') %>
+JENKINS_USE_GITHUB_AUTH="<%= p('jenkins.use_github_auth') %>"
+USERNAME=<%= p('jenkins.github.integration_user') %>
+TOKEN=<%= p('jenkins.github.integration_user.access_token') %>
+
+if [ ${JENKINS_USE_GITHUB_AUTH} == "false" ]; then
+  USERNAME=administrator
+  TOKEN=<%= p('jenkins.admin.password') %>
+fi
 
 SLEEP_INTERVAL_IN_SECONDS=5
 TIMEOUT_IN_SECONDS=600
@@ -69,8 +75,8 @@ if ! ps -p "${pid}" >/dev/null; then echo 0; exit 0; fi
 # Process is running, so send signal to instruct the process to gracefully shutdown Jenkins.
 echo "$(date -Ins): Draining ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
 
-CRUMB=$(curl --silent --user ${USERNAME}:${PASSWORD} ${JENKINS_URL}${CRUMB_PATH})
-CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header ${CRUMB} ${JENKINS_URL}"
+CRUMB=$(curl --silent --user ${USERNAME}:${TOKEN} ${JENKINS_URL}${CRUMB_PATH})
+CURL_PREFIX="curl --globoff --silent --user ${USERNAME}:${TOKEN} --header ${CRUMB} ${JENKINS_URL}"
 
 ${CURL_PREFIX}/quietDown --request POST
 
