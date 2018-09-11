@@ -113,6 +113,9 @@ properties:
   jenkins.use_github_repos:
     description: "A boolean indicating whether to use GitHub Enterprise repos"
     default: "false"
+  jenkins.github.integration_user.name:
+    description: "Github integration user"
+    default: ""
   jenkins.github.integration_user.ssh:
     description: "Github integration user SSH key"
     default: ""
