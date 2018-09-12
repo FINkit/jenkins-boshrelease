@@ -188,3 +188,7 @@ properties:
   toggle.jenkins.drain:
     description: "Toggle drain feature"
     default: false
+  jenkins.disabled_plugins:
+    description: "List of installed plugins to be disabled"
+    default: |
+      example

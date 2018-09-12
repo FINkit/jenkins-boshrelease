@@ -45,6 +45,15 @@ touch /var/vcap/store/jenkins-master/plugins/cvs.jpi.disabled
 touch /var/vcap/store/jenkins-master/plugins/ant.jpi.disabled
 touch /var/vcap/store/jenkins-master/plugins/translation.jpi.disabled
 
+OLDIFS=$IFS
+IFS=$'\n'
+plugins=(<%= p('jenkins.disabled_plugins') %>)
+IFS=$OLDIFS
+for (( i=0; i<${#plugins[@]}; i++ )); do
+    echo "Disabling ${plugins[$i]} plugin"
+    touch /var/vcap/store/jenkins-master/plugins/${plugins[$i]}.jpi.disabled
+done
+
 if [[ ! -d /var/vcap/store/jenkins-master/userContent ]]; then
     echo "Copying UserContent..."
     cp /var/vcap/jobs/jenkins-master/config/*.png /var/vcap/store/jenkins-master/userContent
