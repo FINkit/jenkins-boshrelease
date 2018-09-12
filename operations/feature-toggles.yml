@@ -1,8 +1,8 @@
 ---
 - type: replace
   path: /instance_groups/name=jenkins-master/jobs/name=jenkins-master/properties?/toggle/jenkins/drain
-  value: true
+  value: false
 
 - type: replace
   path: /instance_groups/name=jenkins-slave/jobs/name=jenkins-slave/properties?/toggle/jenkins/drain
-  value: true
+  value: false
