@@ -20,3 +20,17 @@ bosh -e MY_ENV \
 bosh -e MY_ENV \
   upload-release
 ```
+
+## 3. Configuration
+### Disabling installed plugins
+Installed plugins may be disabled at deployment time by providing a list of plugins to be disabled in an operations file.
+e.g. disable-plugins.yml
+```
+---
+- type: replace
+  path: /instance_groups/name=jenkins-master/jobs/name=jenkins-master/properties?/jenkins/disabled_plugins
+  value: |
+    gatling
+    scoverage
+    whitesource
+```
