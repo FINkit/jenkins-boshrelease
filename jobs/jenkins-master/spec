@@ -62,10 +62,10 @@ properties:
         type: UsernamePasswordCredentialImpl
   jenkins.globalproperties.notifywhenonline:
     description: "Email address to send notification to when node becomes available"
-    default: "monitise@service-now.com"
+    default: ""
   jenkins.globalproperties.notifywhenoffline:
     description: "Email address to send notification to when node goes offline"
-    default: "monitise@service-now.com"
+    default: ""
   jenkins.smtp.host:
     description: "Host address of the smtp server"
     default: "smtp.mail-server.com"
