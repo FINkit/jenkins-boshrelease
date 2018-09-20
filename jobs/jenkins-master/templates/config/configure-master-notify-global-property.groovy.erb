@@ -1,0 +1,9 @@
+import jenkins.model.*
+import hudson.slaves.*
+import org.jenkinsci.plugins.mailwatcher.*
+
+def jenkins = Jenkins.getInstance()
+
+jenkins.getGlobalNodeProperties().add(new WatcherNodeProperty("<%= p('jenkins.globalproperties.notifywhenonline') %>","<%= p('jenkins.globalproperties.notifywhenoffline') %>"));
+
+jenkins.save()
