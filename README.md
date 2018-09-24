@@ -34,3 +34,19 @@ e.g. disable-plugins.yml
     scoverage
     whitesource
 ```
+
+## 4. Feature Toggles
+The use of certain features can be controlled using the feature ops file at [/operations/feature-toggles.yml](operations/feature-toggles.yml).<br/>
+e.g. draining Jenkins master
+```
+---
+- type: replace
+  path: /instance_groups/name=jenkins-master/jobs/name=jenkins-master/properties?/toggle/jenkins/drain
+  value: false
+```
+Short lived toggles should eventually be enabled by default within the job spec or removed.
+
+## 5. Drain
+Draining of both the Jenkins master and individual agents can be used to ensure running builds have completed before the nodes are shutdown during any restart.  A drain of Jenkins master will ensure all running builds have completed before shutdown, whereas a drain of an individual agent will only ensure running builds on that agent are completed.<br/>
+
+Builds that take longer than the defined timeout period will be forcibly cancelled.  Any pending builds will resume when the node is active again.
