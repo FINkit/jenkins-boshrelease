@@ -34,3 +34,14 @@ e.g. disable-plugins.yml
     scoverage
     whitesource
 ```
+
+## 4. Feature Toggles
+The use of certain features can be controlled using the feature ops file at [/operations/feature-toggles.yml](operations/feature-toggles.yml).<br/>
+e.g. draining Jenkins master
+```
+---
+- type: replace
+  path: /instance_groups/name=jenkins-master/jobs/name=jenkins-master/properties?/toggle/jenkins/drain
+  value: false
+```
+Short lived toggles should eventually be enabled by default within the job spec or removed.
