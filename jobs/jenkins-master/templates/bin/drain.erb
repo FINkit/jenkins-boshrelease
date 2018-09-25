@@ -15,7 +15,7 @@ if [ ${JENKINS_USE_GITHUB_AUTH} = "false" ]; then
 fi
 
 SLEEP_INTERVAL_IN_SECONDS=5
-TIMEOUT_IN_SECONDS=300
+TIMEOUT_IN_SECONDS=<%= p('drain.timeout') %>
 CRUMB_PATH='/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
 BUILDS_PATH="/api/xml?&tree=jobs[builds[*]]&xpath=/hudson/job/build[building=%22true%22]&wrapper=builds"
 

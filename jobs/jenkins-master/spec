@@ -199,3 +199,6 @@ properties:
     description: "List of installed plugins to be disabled"
     default: |
       example
+  drain.timeout:
+    description: "Time to wait in seconds before drain cancels running builds"
+    default: 600

@@ -74,3 +74,6 @@ properties:
   toggle.jenkins.drain:
     description: "Toggle drain feature"
     default: true
+  drain.timeout:
+    description: "Time to wait in seconds before drain cancels running builds"
+    default: 600
