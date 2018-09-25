@@ -342,6 +342,7 @@ jobs:
   plan:
   - get: bbl-state
   - get: cf-deployment-concourse-tasks
+  - get: set-pipeline
   - task: bbl-destroy
     file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
     input_mapping:
