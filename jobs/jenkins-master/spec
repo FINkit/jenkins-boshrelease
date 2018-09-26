@@ -12,6 +12,9 @@ provides:
   properties:
   - jenkins.server.port
   - jenkins.admin.password
+  - jenkins.use_github_auth
+  - jenkins.github.integration_user.access_token
+  - jenkins.github.integration_user.name
 
 templates:
   bin/backup.sh.erb: bin/bbr/backup
