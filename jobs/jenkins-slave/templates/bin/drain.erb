@@ -6,8 +6,15 @@ set -eo pipefail
 
 <% if_link('jenkins_master') do |jenkins_master| %>
 JENKINS_URL=http://<%= link('jenkins_master').instances[0].address %>:<%= link('jenkins_master').p('jenkins.server.port') %>
-USERNAME=administrator
-PASSWORD=<%= link('jenkins_master').p('jenkins.admin.password') %>
+
+JENKINS_USE_GITHUB_AUTH="<%= link('jenkins_master').p('jenkins.use_github_auth') %>"
+USERNAME=<%= link('jenkins_master').p('jenkins.github.integration_user.name') %>
+TOKEN=<%= link('jenkins_master').p('jenkins.github.integration_user.access_token') %>
+
+if [ ${JENKINS_USE_GITHUB_AUTH} = "false" ]; then
+  USERNAME=administrator
+  TOKEN=<%= link('jenkins_master').p('jenkins.admin.password') %>
+fi
 
 JOB_NAME=jenkins-slave
 SLEEP_INTERVAL_IN_SECONDS=5
@@ -16,7 +23,7 @@ CRUMB_PATH='/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
 BUILDS_PATH="/api/xml?&tree=jobs[builds[*]]&xpath=/hudson/job/build[starts-with(@builtOn,<%= p('jenkins.slave.type') %>-<%= spec.id %>)%20and%20building=%22true%22]&wrapper=builds"
 NODE_NAME_PATH="/computer/api/xml?xpath=/computerSet/computer[starts-with(displayName,%27build%27)]/displayName"
 
-CRUMB=$(curl --silent --user ${USERNAME}:${PASSWORD} ${JENKINS_URL}${CRUMB_PATH})
+CRUMB=$(curl --silent --user ${USERNAME}:${TOKEN} ${JENKINS_URL}${CRUMB_PATH})
 
 . /var/vcap/jobs/jenkins-slave/bin/common-functions
 
@@ -79,7 +86,7 @@ if ! ps -p "${pid}" >/dev/null; then echo 0; exit 0; fi
 # Process is running, so send signal to instruct the Jenkins Master to wait for jobs running on this slave to complete, then toggle the slave offline.
 echo "$(date -Ins): Draining ${pid} with BOSH_JOB_STATE: ${BOSH_JOB_STATE} and BOSH_JOB_NEXT_STATE: ${BOSH_JOB_NEXT_STATE}"
 
-CURL_GET_PREFIX="curl --globoff --silent --user ${USERNAME}:${PASSWORD} --header ${CRUMB} ${JENKINS_URL}"
+CURL_GET_PREFIX="curl --globoff --silent --user ${USERNAME}:${TOKEN} --header ${CRUMB} ${JENKINS_URL}"
 
 toggle_node_offline "Shutdown+from+BOSH" $(extract_node_name)
 poll_builds
