@@ -12,6 +12,7 @@ packages:
 - terraform
 - golang
 - groovy
+- sonar-scanner
 
 consumes:
 - name: jenkins_master
@@ -43,8 +44,6 @@ properties:
   jenkins.gitconfig.email:
     description: "Email used when commiting to a git repository"
     default: "jenkins@jenkinsci.local"
-  jenkins.admin.password:
-    description: "Password for the admin user"
   jenkins.slave.executors:
     description: "The number of executors for this slave"
   jenkins.slave.labels:

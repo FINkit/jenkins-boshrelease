@@ -1,0 +1,10 @@
+import jenkins.model.*
+import hudson.plugins.sonar.*
+import hudson.tools.*
+
+def inst = Jenkins.getInstance()
+def desc = inst.getDescriptor("hudson.plugins.sonar.SonarRunnerInstallation")
+def installation = new SonarRunnerInstallation("<%= p('sonar.scanner.name') %>", "<%= p('sonar.scanner.path') %>", null)
+
+desc.setInstallations(installation)
+desc.save()
