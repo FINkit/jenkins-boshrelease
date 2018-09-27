@@ -35,6 +35,7 @@ templates:
   config/configure-master-access-control.groovy.erb: init.groovy.d/configure-master-access-control.groovy
   config/configure-maven.groovy.erb: init.groovy.d/configure-maven.groovy
   config/configure-sonar.groovy.erb: init.groovy.d/configure-sonar.groovy
+  config/configure-sonar-runner.groovy.erb: init.groovy.d/configure-sonar-runner.groovy
   config/configure-slack.groovy.erb: init.groovy.d/configure-slack.groovy
   config/configure-whitesource.groovy.erb: init.groovy.d/configure-whitesource.groovy
   config/configure-project-based-matrix-security.groovy: init.groovy.d/configure-project-based-matrix-security.groovy
@@ -183,6 +184,12 @@ properties:
   sonar.installation.name:
     description: "Sonar installation name"
     default: ""
+  sonar.scanner.name:
+    description: "Sonar scanner name"
+    default: "sonar"
+  sonar.scanner.path:
+    description: "Sonar scanner runner path"
+    default: "/var/vcap/store/jenkins-slave/sonar-scanner-3.2.0.1227"
   sonar.server.url:
     description: "Sonar server url"
     default: ""

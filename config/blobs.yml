@@ -98,6 +98,10 @@ setuptools/setuptools-36.0.1.tar.gz:
   size: 659748
   object_id: 56f73541-1cf3-4170-7d26-63174bc92e0c
   sha: c8b9d7019eafc6e7b296052b6ee1ca6b0c14d764
+sonar-scanner/sonar-scanner-3.2.0.1227.zip:
+  size: 544873
+  object_id: ad1f59ba-522e-47a3-5e44-ad18a59a57af
+  sha: 56e3f8df7fb1db9b262b34688fd2f28389ad5f50
 swarm-client/swarm-client-2.2-jar-with-dependencies.jar:
   size: 1385476
   object_id: 0955da33-cdff-4169-7914-fa46bfb086a9

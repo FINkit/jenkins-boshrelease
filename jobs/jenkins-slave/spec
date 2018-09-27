@@ -12,6 +12,7 @@ packages:
 - terraform
 - golang
 - groovy
+- sonar-scanner
 
 consumes:
 - name: jenkins_master

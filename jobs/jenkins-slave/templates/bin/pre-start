@@ -31,6 +31,8 @@ if [[ ! -h /home/vcap/.m2 ]]; then
   fi
 fi
 
+unzip -o /var/vcap/jobs/jenkins-slave/packages/sonar-scanner/sonar-scanner/sonar-scanner-3.2.0.1227.zip -d /var/vcap/store/jenkins-slave/
+
 chown -R vcap:vcap /var/vcap/data/jenkins-slave
 
 # Copy public and private ssh keys for protegrity slave
