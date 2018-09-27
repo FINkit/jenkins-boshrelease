@@ -187,6 +187,7 @@ jobs:
       - create-dev-release
       trigger: true
     - get: warden-stemcell
+      trigger: true
   - task: bbl-up
     file: cf-deployment-concourse-tasks/bbl-up/task.yml
     input_mapping:
