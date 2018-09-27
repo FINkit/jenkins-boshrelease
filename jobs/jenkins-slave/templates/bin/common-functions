@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CURL_POST_PREFIX="curl --request POST --data \"\" --silent --user ${USERNAME}:${PASSWORD} --header ${CRUMB} ${JENKINS_URL}"
+CURL_POST_PREFIX="curl --request POST --data \"\" --silent --user ${USERNAME}:${TOKEN} --header ${CRUMB} ${JENKINS_URL}"
 
 toggle_node_offline() {
   local _message=$1
