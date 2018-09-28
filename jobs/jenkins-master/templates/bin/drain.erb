@@ -46,9 +46,9 @@ poll_builds() {
     set +e
     let TIMEOUT_IN_SECONDS=TIMEOUT_IN_SECONDS-SLEEP_INTERVAL_IN_SECONDS
     set -e
-    if [ ${TIMEOUT_IN_SECONDS} -eq 0 ]; then
+    if [ ${TIMEOUT_IN_SECONDS} -le 0 ]; then
       echo "$(date -Ins): Timed out waiting for builds to complete"
-      exit 1
+      exit 0
     fi
     _builds=$(check_builds)
   done
