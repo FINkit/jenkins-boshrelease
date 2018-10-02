@@ -6,7 +6,6 @@ packages:
 - swarm-client
 - apache-maven
 - git-client
-- ansible
 - cf-cli
 - gcloud
 - terraform
