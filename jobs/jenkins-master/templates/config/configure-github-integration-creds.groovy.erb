@@ -46,9 +46,9 @@ gheDomain = new Domain(GHE_DOMAIN_NAME, null, Collections.emptyList())
 credentialsStore.addDomain(gheDomain, Collections.emptyList())
 
 /// Add username/password credentials to GHE domain
-domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-github-domain-credential', '', '<%= p('jenkins.github.integration_user.name') %>', Secret.fromString(GHE_ACCESS_TOKEN))
+domainUnPwCredentials = new UsernamePasswordCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-github-domain-credential', '', '<%= p('jenkins.github.integration_user.name') %>', GHE_ACCESS_TOKEN)
 credentialsStore.addCredentials(gheDomain, domainUnPwCredentials)
 
 // Add text secret credentials to GHE Domain
-gheStringCredentials = new StringCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-github-domain-secret', '', GHE_ACCESS_TOKEN)
+gheStringCredentials = new StringCredentialsImpl(CredentialsScope.GLOBAL, GHE_INTEGRATION_USER + '-github-domain-secret', '', Secret.fromString(GHE_ACCESS_TOKEN))
 credentialsStore.addCredentials(gheDomain, gheStringCredentials)
