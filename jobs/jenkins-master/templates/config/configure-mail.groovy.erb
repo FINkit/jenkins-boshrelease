@@ -7,6 +7,6 @@ mailDescriptor.setSmtpAuth('<%= p('jenkins.smtp.username') %>','<%= p('jenkins.s
 mailDescriptor.setSmtpHost('<%= p('jenkins.smtp.host') %>')
 mailDescriptor.setSmtpPort('<%= p('jenkins.smtp.port') %>')
 mailDescriptor.setReplyToAddress('<%= p('jenkins.smtp.reply') %>')
-mailDescriptor.setUseSsl('<%= p('jenkins.smtp.ssl') %>')
+mailDescriptor.setUseSsl(<%= p('jenkins.smtp.ssl') %>)
 
 instance.save()
