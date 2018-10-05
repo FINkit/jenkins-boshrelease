@@ -10,16 +10,10 @@ def descriptor = instance.getDescriptor("hudson.plugins.sonar.SonarGlobalConfigu
 def sonarInstallation = new SonarInstallation(
   '<%= p('sonar.installation.name') %>', //name
   '<%= p('sonar.server.url') %>', //serverUrl
-  '<%= p('sonar.service.version') %>', // serviceVersion
   "", // serverAuthenticationToken,
-  "", // databaseUrl, 
-  "", // databaseLogin, 
-  "", // databasePassword,
   "", // mojoVersion, 
   "", // additionalProperties, 
   new TriggersConfig(), // triggers,
-  '<%= p('sonar.jenkins.username') %>', // sonarLogin,
-  '<%= p('sonar.jenkins.password') %>', // sonarPassword,
   "" // additionalAnalysisProperties
 )
 
