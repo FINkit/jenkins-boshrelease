@@ -51,7 +51,6 @@ templates:
   config/permissions.yml.erb: config/permissions.yml
   config/scriptApproval.xml.erb: config/scriptApproval.xml
   config/sonar.xml.erb: config/sonar.xml
-  config/tcp-slave-agent-port.groovy.erb: init.groovy.d/tcp-slave-agent-port.groovy
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
