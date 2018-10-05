@@ -23,6 +23,13 @@ if [[ $(ls /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy) ]]; then
     rm /var/vcap/store/jenkins-master/init.groovy.d/configure-project-based-matrix-security.groovy
 fi
 
+if [ -z "<%= p('jenkins.smtp.host') %>" ]; then
+    # Do not configure mail plugins it mail config is not specified
+    rm /var/vcap/store/jenkins-master/init.groovy.d/configure-master-notify-global-property.groovy
+    rm /var/vcap/store/jenkins-master/init.groovy.d/configure-mail.groovy
+    touch /var/vcap/store/jenkins-master/plugins/mail-watcher-plugin.jpi.disabled
+fi
+
 if [ ${JENKINS_USE_GITHUB_AUTH} == "true" ]; then
     if [ -f /var/vcap/store/jenkins-master/init.groovy.d/configure-access.groovy ]; then
         rm /var/vcap/store/jenkins-master/init.groovy.d/configure-access.groovy
