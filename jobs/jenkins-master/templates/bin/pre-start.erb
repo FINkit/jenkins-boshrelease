@@ -18,6 +18,10 @@ fi
 if [[ $(ls /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy) ]]; then
     echo "Copying Groovy..."
     cp /var/vcap/jobs/jenkins-master/init.groovy.d/*.groovy /var/vcap/store/jenkins-master/init.groovy.d/
+
+    # Temporarily disable configuration of sonar plugin
+    rm /var/vcap/store/jenkins-master/init.groovy.d/configure-sonar.groovy
+
     # We want standard Jenkins managed access unless defined
     rm /var/vcap/store/jenkins-master/init.groovy.d/configure-github-access.groovy
     rm /var/vcap/store/jenkins-master/init.groovy.d/configure-project-based-matrix-security.groovy
