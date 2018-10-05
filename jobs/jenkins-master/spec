@@ -192,15 +192,6 @@ properties:
   sonar.server.url:
     description: "Sonar server url"
     default: ""
-  sonar.service.version:
-    description: "Sonar service version"
-    default: "5.2"
-  sonar.jenkins.username:
-    description: "Sonar username for Jenkins user"
-    default: ""
-  sonar.jenkins.password:
-    description: "Sonar password for Jenkins user"
-    default: ""
   toggle.jenkins.drain:
     description: "Toggle drain feature"
     default: true
