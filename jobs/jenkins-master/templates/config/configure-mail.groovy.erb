@@ -3,6 +3,7 @@ import hudson.tasks.*
 
 def instance = Jenkins.getInstance()
 def mailDescriptor = instance.getDescriptor("hudson.tasks.Mailer")
+
 mailDescriptor.setSmtpAuth('<%= p('jenkins.smtp.username') %>','<%= p('jenkins.smtp.password') %>')
 mailDescriptor.setSmtpHost('<%= p('jenkins.smtp.host') %>')
 mailDescriptor.setSmtpPort('<%= p('jenkins.smtp.port') %>')
