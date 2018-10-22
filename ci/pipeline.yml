@@ -230,6 +230,8 @@ jobs:
       JENKINS_AUTH_METHOD: "local"
       JENKINS_HOST: "http://localhost:8080"
       JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
+      JENKINS_TOKEN: ((jenkins_admin_password))
+      JENKINS_USERNAME: administrator
       TEST_TAGS: "@unit && @jenkins"
   <<: *slack-alert
 
