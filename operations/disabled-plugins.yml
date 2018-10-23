@@ -1,0 +1,34 @@
+---
+- type: replace
+  path: /instance_groups/name=jenkins-master/jobs/name=jenkins-master/properties?/jenkins/disabled_plugins
+  value: |
+    blueocean-autofavorite
+    blueocean-bitbucket-pipeline
+    blueocean-commons
+    blueocean-config
+    blueocean-core-js
+    blueocean-dashboard
+    blueocean-display-url
+    blueocean-events
+    blueocean-git-pipeline
+    blueocean-github-pipeline
+    blueocean-i18n
+    blueocean-jira
+    blueocean-jwt
+    blueocean-personalization
+    blueocean-pipeline-api-impl
+    blueocean-pipeline-editor
+    blueocean-pipeline-scm-api
+    blueocean-rest-impl
+    blueocean-rest
+    blueocean-web
+    blueocean
+    cloudbees-bitbucket-branch-source
+    favorite
+    handy-uri-templates-2-api
+    jenkins-design-language
+    jira
+    mercurial
+    pubsub-light
+    sse-gateway
+    variant
