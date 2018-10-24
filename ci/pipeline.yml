@@ -221,6 +221,8 @@ jobs:
       - warden-stemcell-xenial/stemcell.tgz
       vars:
         deployment_name: *deployment-name
+      ops_files:
+      - jenkins-boshrelease/operations/disabled-plugins.yml
   - task: test-jenkins
     file: concourse-tasks/tasks/run-devtools-tests/task.yml
     params:
