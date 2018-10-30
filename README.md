@@ -22,6 +22,18 @@ bosh -e MY_ENV \
 ```
 
 ## 3. Configuration
+### Enabling persistent disks
+Persistent disks may be enabled at deployment time by providing a list of such disks in an operations file, as shown in the example at [/operations/add-persistent-disks.yml](operations/add-persistent-disk.yml). Also, the required disk type must be specified in your cloud config, as shown in the example snippet below:
+```
+disk_types:
+- disk_size: 1024
+  name: default
+- disk_size: 10_240
+  name: 10GB
+- disk_size: 100_240
+  name: 100GB
+```
+
 ### Disabling installed plugins
 Installed plugins may be disabled at deployment time by providing a list of plugins to be disabled in an operations file.
 e.g. disable-plugins.yml
