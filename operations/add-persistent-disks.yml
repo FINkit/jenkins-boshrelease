@@ -1,0 +1,14 @@
+---
+- type: replace
+  path: /persistent_disk_pools?
+  value:
+  - name: 10GB
+    disk_size: 10_240
+  - name: 100GB
+    disk_size: 102_400
+- type: replace
+  path: /instance_groups/name=jenkins-master/persistent_disk_pool?
+  value: 100GB
+- type: replace
+  path: /instance_groups/name=jenkins-slave/persistent_disk_pool?
+  value: 10GB
