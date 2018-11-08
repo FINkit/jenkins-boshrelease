@@ -134,6 +134,7 @@ sse-gateway:1.16
 ssh-agent:1.15
 ssh-credentials:1.14
 structs:1.17
+sumologic-publisher:1.1
 swarm:3.11
 throttle-concurrents:2.0.1
 timestamper:1.8.9
