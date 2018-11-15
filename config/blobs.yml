@@ -50,6 +50,10 @@ jenkins/apache-maven-3.5.2-bin.tar.gz:
   size: 8738691
   object_id: 2e476708-9b9f-4973-6f39-ee38965cd9ee
   sha: 190dcebb8a080f983af4420cac4f3ece7a47dd64
+jenkins/apache-maven-3.6.0-bin.tar.gz:
+  size: 9063587
+  object_id: b07b7fb9-13de-4add-4f32-3b8f549fbf72
+  sha: a6bd3779ab7aef6da3b6e9b9bb80471641830827
 jenkins/jenkins_2.121.3.war:
   size: 74764818
   object_id: 62126f77-f8a7-4aba-78b4-203b9f1179e3
