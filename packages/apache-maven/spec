@@ -3,4 +3,4 @@ name: apache-maven
 dependencies: 
 - oraclejdk
 files:
-- jenkins/apache-maven-3.6.0-bin.tar.gz
+- jenkins/apache-maven-3.5.2-bin.tar.gz
