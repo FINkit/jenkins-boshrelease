@@ -61,7 +61,7 @@ resources:
 - name: devtools-tests
   type: git
   source:
-      uri: git@github.com:finkit/devtools-tests
+      uri: git@github.finkit.io:finkit/devtools-tests
       branch: master
       private_key: ((github-devtools-tests-key.private))
 - name: jenkins-boshrelease-tarball
