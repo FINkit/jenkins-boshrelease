@@ -234,6 +234,16 @@ jobs:
       JENKINS_PASSWORD_CREDHUB_PATH: "/bosh-jenkins-boshrelease/jenkins/jenkins_admin_password"
       JENKINS_USERNAME: administrator
       TEST_TAGS: "@unit && @jenkins"
+    on_success:
+      put: bosh-deployment # Destroy Jenkins instance
+      params:
+        source_file: source/source.yml
+        delete:
+          enabled: true
+          force: true
+        vars:
+          deployment_name: *deployment-name
+
   <<: *slack-alert
 
 - name: release-final
