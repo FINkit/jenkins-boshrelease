@@ -12,7 +12,7 @@ resource_types:
   type: docker-image
   source:
     repository: concourse/concourse-pipeline-resource
-    tag: 3
+    tag: 1
 - name: google-cloud-storage
   type: docker-image
   source:
