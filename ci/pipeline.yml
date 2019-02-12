@@ -40,6 +40,8 @@ resources:
     - initial-versions.yml
 - name: bosh-deployment
   type: bosh-deployment
+  source:
+    skip_check: true
 - name: cf-deployment-concourse-tasks
   type: git
   source:
