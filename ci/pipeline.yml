@@ -40,6 +40,8 @@ resources:
     - initial-versions.yml
 - name: bosh-deployment
   type: bosh-deployment
+  source:
+    skip_check: true
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -127,9 +129,6 @@ groups:
   - prerelease-major
   - prerelease-minor
   - prerelease-patch
-- name: destroy
-  jobs:
-  - destroy-infrastructure
 
 jobs:
 - name: set-pipeline
@@ -341,23 +340,4 @@ jobs:
         - final-jenkins-boshrelease-tarball/*.tgz
       get_params:
         skip_download: true   
-  <<: *slack-alert
-
-- name: destroy-infrastructure
-  plan:
-  - get: bbl-state
-  - get: cf-deployment-concourse-tasks
-  - task: bbl-destroy
-    file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
-    input_mapping:
-      bbl-state: bbl-state
-    output_mapping:
-      updated-bbl-state: updated-bbl-state
-    params:
-      BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp.key))
-    ensure:
-      put: bbl-state
-      params:
-        repository: updated-bbl-state
-        rebase: true
   <<: *slack-alert
